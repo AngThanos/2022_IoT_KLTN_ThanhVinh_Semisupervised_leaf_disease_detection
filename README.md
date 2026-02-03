@@ -1,69 +1,124 @@
-# Research-Repo-Template
+<div align="center">    
+ 
+# Semi-Supervised Leaf Disease Detection using YOLOv11
 
-A comprehensive template for organizing and managing research projects with standardized directory structure and best practices.
+</div>
 
 ## Overview
+This repository implements multiple semi-supervised learning approaches for banana leaf disease detection using YOLOv11 with various attention mechanisms. We propose multiple YOLOv11 variants (Base, SA-Origin, SA-Custom) with Self-Attention mechanisms to enhance feature extraction and detection accuracy.
 
-This repository provides a structured template for research projects, making it easier to organize code, data, documentation, and results in a consistent manner. It follows best practices for reproducible research and collaborative development.
+## Schemes
 
-## Directory Structure
+### Scheme 1: Iterative Pseudo-Labeling
+This scheme leverages unlabeled data through iterative pseudo-labeling to improve detection performance in scenarios with limited labeled data. The framework generates pseudo-labels on unlabeled images and iteratively refines the model by incorporating high-confidence predictions.
 
+![image](scheme1.png)
+
+**Training script**: `Sample_Semi_Train_Iterative_Simple.sh`
+
+### Scheme 2: [Coming Soon]
+The second semi-supervised learning scheme
+
+![image](scheme2.png)
+
+**Training script**: 
+
+### Scheme 3: [Coming Soon]
+The third semi-supervised learning scheme
+
+![image](scheme3.png)
+
+**Training script**: 
+
+## Prerequisites
+Step by Step installation,
+```bash
+conda create -n leaf_disease python=3.12
+conda activate leaf_disease
+
+# Install PyTorch (adjust CUDA version as needed)
+# For CUDA 12.4:
+conda install pytorch torchvision torchaudio pytorch-cuda=12.4 -c pytorch -c nvidia
+
+# For other CUDA versions, visit: https://pytorch.org
+
+# Install Ultralytics YOLOv11
+cd ultralytics-8.3.225
+pip install -e .
 ```
-├── CONTRIBUTING.md        # How to contribute
-├── LICENSE                # MIT License
-├── README.md              # This file
-├── CHANGELOG.md           # Version history
-├── research_proposal.md   # Research proposal document
-├── environment.yml        # Conda environment
-├── requirements.txt       # Python dependencies
-├── setup.py               # Package installation
-├── .pre-commit-config.yaml # Code quality checks
-├── config/                # Configuration files
-├── data/                  # (gitignored) raw & processed files
-├── docs/                  # Project documentation
-│   └── CODE_STYLE.md      # Coding standards
-├── notebooks/             # Jupyter notebooks
-├── results/               # Experiment outputs
-├── scripts/               # Utility scripts
-├── src/                   # Python modules & scripts
-└── tests/                 # Unit tests
+
+**Tested Environment:**
+- Python 3.12.6
+- PyTorch 2.6.0 + CUDA 12.4
+- Ultralytics 8.3.225
+
+## Dataset Preparation
+Organize your dataset in the following structure:
+```
+your_data_path/
+├── images/
+│   ├── train/
+│   ├── val/
+│   └── test/
+├── labels/
+│   ├── train/
+│   ├── val/
+│   └── test/
+└── Unlabeled_Images_2025/
+    └── images/
 ```
 
-## Getting Started
+Update dataset configuration files (`Sample_Banana_Disease_Dataset.yaml`, `Sample_Banana_Disease_Dataset_Semi.yaml`) with your dataset paths:
+```yaml
+path: /path/to/your/dataset
+train: images/train
+val: images/val
+test: images/test
+```
 
-1. Clone this repository
-2. Customize the README and other files to fit your project
-3. Start adding your code, data, and documentation
+## Training
 
-## Usage
+### Supervised Baseline Training
+Train the initial models using only labeled data:
+```bash
+bash Sample_Supervised_Train_Baseline_Simple.sh
+```
+This will train YOLOv11-Base, YOLOv11-SA-Origin, and YOLOv11-SA-Custom for 400 epochs.
 
-### Code Organization
-- Place your Python modules and scripts in the `src/` directory
-- Store utility scripts in the `scripts/` directory
-- Store Jupyter notebooks in the `notebooks/` directory
-- Write tests in the `tests/` directory
+### Semi-Supervised Iterative Training
+Run the semi-supervised learning pipeline with iterative pseudo-labeling:
+```bash
+bash Sample_Semi_Train_Iterative_Simple.sh
+```
 
-### Data and Results
-- Store data in the `data/` directory (this is gitignored by default)
-- Save experiment outputs in the `results/` directory
-- Keep configuration files in the `config/` directory
+**Note**: Update the paths in shell scripts to match your dataset location before running.
 
-### Documentation
-- Keep documentation in the `docs/` directory
-- Follow the coding standards in `docs/CODE_STYLE.md`
-- Update the `CHANGELOG.md` when making significant changes
+### Evaluation
+Evaluate trained models:
+```bash
+yolo val model=runs/detect/YOLOv11-All-Scheme-Flinta/model_name/weights/best.pt \
+         data=Sample_Banana_Disease_Dataset_Test.yaml \
+         imgsz=1024
+```
 
-### Development Tools
-- Use the `Makefile` for common commands (run `make help` to see available commands)
-- Install dependencies with `pip install -r requirements.txt`
-- For conda users, create the environment with `conda env create -f environment.yml`
-- Install the package in development mode with `pip install -e .`
-- Set up pre-commit hooks with `pre-commit install`
+## Results
 
-## Contributing
+| Model | mAP@0.5 | mAP@0.5:0.95 | Precision | Recall |
+|-------|---------|--------------|-----------|--------|
+| YOLOv11-Base | - | - | - | - |
+| YOLOv11-SA-Origin | - | - | - | - |
+| YOLOv11-SA-Custom | - | - | - | - |
+| YOLOv11-SA-Custom-Iter5 | - | - | - | - |
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+## Acknowledgements
+This project is based on the following open-source projects:
+- [Ultralytics YOLOv11](https://github.com/ultralytics/ultralytics)
+- Semi-supervised learning techniques for object detection
 
-## License
+We thank their authors for making the source code publicly available.
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## Contact
+If you have any problem with our code, feel free to contact
+- phamthanh050204@gmail.com
+
+or describe your problem in Issues.
