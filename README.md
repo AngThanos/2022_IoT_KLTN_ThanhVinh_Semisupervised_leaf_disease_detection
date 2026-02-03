@@ -12,21 +12,21 @@ This repository implements multiple semi-supervised learning approaches for bana
 ### Scheme 1: Iterative Pseudo-Labeling
 This scheme leverages unlabeled data through iterative pseudo-labeling to improve detection performance in scenarios with limited labeled data. The framework generates pseudo-labels on unlabeled images and iteratively refines the model by incorporating high-confidence predictions.
 
-![image](scheme1.png)
+![image](resources/scheme1.png)
 
 **Training script**: `Sample_Semi_Train_Iterative_Simple.sh`
 
 ### Scheme 2: [Coming Soon]
 The second semi-supervised learning scheme
 
-![image](scheme2.png)
+![image](resources/scheme2.png)
 
 **Training script**: 
 
 ### Scheme 3: [Coming Soon]
 The third semi-supervised learning scheme
 
-![image](scheme3.png)
+![image](resources/scheme3.png)
 
 **Training script**: 
 
