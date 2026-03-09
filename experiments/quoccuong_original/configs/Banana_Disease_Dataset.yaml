@@ -1,0 +1,9 @@
+path: banana_dataset/Banana_Dataset_2024_TrainValTest/
+train: train/
+val: val/
+# train: /YOLO_Dataset_Merge/train/
+# val: YOLO_Dataset_Merge/val/
+# val: YOLO/Test/
+nc: 2
+names: ['early_sigatoka', 'late_sigatoka']
+

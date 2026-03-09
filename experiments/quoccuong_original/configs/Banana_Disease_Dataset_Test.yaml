@@ -1,0 +1,18 @@
+train: banana_dataset/Banana_Dataset_ValTest_2025/test
+
+#Tập 2025
+# val: banana_dataset/Banana_Dataset_ValTest_2025/test_each1
+
+
+
+#Tập 2024
+val: banana_dataset/Banana_Dataset_2024_TrainValTest/test/
+
+# val: banana_dataset/Banana_Dataset_ValTest_2025/val
+# val: banana_dataset/Banana_Dataset_2024_TrainValTest/test/
+# train: /YOLO_Dataset_Merge/train/
+# val: YOLO_Dataset_Merge/val/
+# val: YOLO/Test/
+nc: 2
+names: ['early_sigatoka', 'late_sigatoka']
+

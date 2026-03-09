@@ -9,26 +9,20 @@ This repository implements multiple semi-supervised learning approaches for bana
 
 ## Schemes
 
-### Scheme 1: Iterative Pseudo-Labeling
-This scheme leverages unlabeled data through iterative pseudo-labeling to improve detection performance in scenarios with limited labeled data. The framework generates pseudo-labels on unlabeled images and iteratively refines the model by incorporating high-confidence predictions.
+### Scheme 1: Iterative Pseudo-Labeling (Baseline)
+Original semi-supervised approach with iterative pseudo-labeling to improve detection with limited labeled data. Generates pseudo-labels on unlabeled images and refines the model by incorporating high-confidence predictions.
 
-![image](resources/scheme1.png)
+**Location**: `experiments/quoccuong_original/`  
+**Training script**: `bash scripts/original_semi_supervised.sh` (run from quoccuong_original directory)
 
-**Training script**: `Sample_Semi_Train_Iterative_Simple.sh`
+### Scheme 2: EMA-based Semi-Supervised with Augmentation (general)
+Advanced semi-supervised learning with Exponential Moving Average (EMA) teacher-student framework and strong augmentations. Gradually increases pseudo-labeled examples ratio (2x-> 3x-> 4x labeled set size) with confidence warmup strategy.
 
-### Scheme 2: [Coming Soon]
-The second semi-supervised learning scheme
-
-![image](resources/scheme2.png)
-
-**Training script**: 
+**Location**: `experiments/augmentation_matters_semi/scheme1_augmat_general/`  
+**Training script**: `bash scripts/augmat_semi_general.sh` (run from scheme1_augmat_general directory)
 
 ### Scheme 3: [Coming Soon]
-The third semi-supervised learning scheme
-
-![image](resources/scheme3.png)
-
-**Training script**: 
+The third semi-supervised learning scheme 
 
 ## Prerequisites
 Step by Step installation,
@@ -53,51 +47,53 @@ pip install -e .
 - Ultralytics 8.3.225
 
 ## Dataset Preparation
-Organize your dataset in the following structure:
-```
-your_data_path/
-├── images/
-│   ├── train/
-│   ├── val/
-│   └── test/
-├── labels/
-│   ├── train/
-│   ├── val/
-│   └── test/
-└── Unlabeled_Images_2025/
-    └── images/
-```
 
-Update dataset configuration files (`Sample_Banana_Disease_Dataset.yaml`, `Sample_Banana_Disease_Dataset_Semi.yaml`) with your dataset paths:
-```yaml
-path: /path/to/your/dataset
-train: images/train
-val: images/val
-test: images/test
-```
+Dataset is organized in `banana_dataset/` folder:
+
+| Directory | Purpose |
+|-----------|---------|
+| `Banana_Dataset_2024_TrainValTest/` | Supervised baseline training (labeled) |
+| `Banana_Dataset_2024_2025/Unlabeled_Images_2025/` | Large unlabeled pool for pseudo-labeling |
+| `Val_Clean/` | Validation set for model evaluation |
+| `Labeled_From_Val/` | Labeled seed data for semi-supervised schemes |
+
+See [banana_dataset/README.md](banana_dataset/README.md) for detailed structure and setup instructions.
+
+**Model output locations:**
+- Supervised baseline: `experiments/quoccuong_original/YOLOv11-All-Scheme-Flinta/`
+- Semi-supervised: `experiments/quoccuong_original/YOLOv11-All-Scheme-Flinta/` (iterations)
+- Augmentation scheme: `experiments/augmentation_matters_semi/scheme1_augmat_general/runs/YOLOv11-AugSeg-Scheme-Fixed/`
 
 ## Training
 
 ### Supervised Baseline Training
-Train the initial models using only labeled data:
+Train YOLOv11 variants using labeled data only:
 ```bash
-bash Sample_Supervised_Train_Baseline_Simple.sh
+cd experiments/quoccuong_original
+bash scripts/original_train.sh
 ```
-This will train YOLOv11-Base, YOLOv11-SA-Origin, and YOLOv11-SA-Custom for 400 epochs.
+Trains YOLOv11-Base, YOLOv11-SA-Origin, YOLOv11-SA-Custom for 400 epochs.
 
-### Semi-Supervised Iterative Training
-Run the semi-supervised learning pipeline with iterative pseudo-labeling:
+### Semi-Supervised Iterative Training (Scheme 1)
+Run iterative pseudo-labeling with the original approach:
 ```bash
-bash Sample_Semi_Train_Iterative_Simple.sh
+cd experiments/quoccuong_original
+bash scripts/original_semi_supervised.sh
 ```
 
-**Note**: Update the paths in shell scripts to match your dataset location before running.
+### Semi-Supervised with EMA Teacher (Scheme 2)
+Advanced semi-supervised training with strong augmentation:
+```bash
+cd experiments/augmentation_matters_semi/scheme1_augmat_general
+bash scripts/augmat_semi_general.sh
+```
+Runs 35 iterations with confidence warmup and dynamic pseudo-label sampling.
 
 ### Evaluation
 Evaluate trained models:
 ```bash
-yolo val model=runs/detect/YOLOv11-All-Scheme-Flinta/model_name/weights/best.pt \
-         data=Sample_Banana_Disease_Dataset_Test.yaml \
+yolo val model=experiments/quoccuong_original/YOLOv11-All-Scheme-Flinta/YOLOv11-Base-400/weights/best.pt \
+         data=experiments/quoccuong_original/configs/Banana_Disease_Dataset_Test.yaml \
          imgsz=1024
 ```
 

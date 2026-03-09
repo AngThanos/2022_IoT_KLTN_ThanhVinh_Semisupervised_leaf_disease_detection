@@ -1,0 +1,13 @@
+# train: banana_dataset/Banana_Dataset_2024_2025/Banana_Dataset_2024
+
+train: banana_dataset/Banana_Dataset_2024_2025/Unlabeled_Images_2025
+
+# train: banana_dataset/Banana_Dataset_2024_2025/
+
+val: banana_dataset/Banana_Dataset_ValTest_2025/val
+# train: /YOLO_Dataset_Merge/train/
+# val: YOLO_Dataset_Merge/val/
+# val: YOLO/Test/
+nc: 2
+names: ['early_sigatoka', 'late_sigatoka']
+
