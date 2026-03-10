@@ -1,111 +1,109 @@
 <div align="center">    
  
-# Semi-Supervised Leaf Disease Detection using YOLOv11
+# Xây dựng hệ thống học bán giám sát kết hợp tăng cường dữ liệu dựa trên mô hình YOLOv11 để phát hiện bệnh trên lá chuối. 
 
 </div>
 
-## Overview
-This repository implements multiple semi-supervised learning approaches for banana leaf disease detection using YOLOv11 with various attention mechanisms. We propose multiple YOLOv11 variants (Base, SA-Origin, SA-Custom) with Self-Attention mechanisms to enhance feature extraction and detection accuracy.
+## Tổng quan
+Repository này triển khai nhiều hướng tiếp cận semi-supervised learning cho bài toán phát hiện bệnh lá chuối bằng YOLOv11 với các attention mechanism khác nhau. Sử dụng nhiều biến thể YOLOv11 (Base, SA-Origin, SA-Custom) có tích hợp Self-Attention để tăng khả năng trích xuất đặc trưng và cải thiện độ chính xác phát hiện.
 
-## Schemes
+## Các scheme
 
 ### Scheme 1: Iterative Pseudo-Labeling (Baseline)
-Original semi-supervised approach with iterative pseudo-labeling to improve detection with limited labeled data. Generates pseudo-labels on unlabeled images and refines the model by incorporating high-confidence predictions.
+Hướng semi-supervised gốc với iterative pseudo-labeling để cải thiện kết quả khi dữ liệu labeled còn hạn chế. Mô hình sinh pseudo-label trên unlabeled images và tiếp tục tinh chỉnh bằng các dự đoán có confidence cao.
 
-**Location**: `experiments/quoccuong_original/`  
-**Training script**: `bash scripts/original_semi_supervised.sh` (run from quoccuong_original directory)
+**Vị trí**: `experiments/quoccuong_original/`  
+**Training script**: `bash scripts/original_semi_supervised.sh` (run ở `quoccuong_original`)
 
 ### Scheme 2: EMA-based Semi-Supervised with Augmentation (general)
-Advanced semi-supervised learning with Exponential Moving Average (EMA) teacher-student framework and strong augmentations. Gradually increases pseudo-labeled examples ratio (2x-> 3x-> 4x labeled set size) with confidence warmup strategy.
+Hướng semi-supervised nâng cao dùng khung teacher-student với Exponential Moving Average (EMA) và strong augmentation. Tỉ lệ mẫu pseudo-labeled được tăng dần (2x -> 3x -> 4x theo kích thước labeled set) cùng chiến lược confidence warmup.
 
-**Location**: `experiments/augmentation_matters_semi/scheme1_augmat_general/`  
-**Training script**: `bash scripts/augmat_semi_general.sh` (run from scheme1_augmat_general directory)
+**Vị trí**: `experiments/augmentation_matters_semi/scheme1_augmat_general/`  
+**Training script**: `bash scripts/augmat_semi_general.sh` (chạy ở `scheme1_augmat_general`)
 
 ### Scheme 3: [Coming Soon]
-The third semi-supervised learning scheme 
+Scheme semi-supervised thứ ba...
 
-## Prerequisites
-Step by Step installation,
+## Môi trường và cài đặt
+Cài đặt:
 ```bash
 conda create -n leaf_disease python=3.12
 conda activate leaf_disease
 
-# Install PyTorch (adjust CUDA version as needed)
-# For CUDA 12.4:
+# Cài đặt PyTorch
+# Ví dụ cho CUDA 12.4:
 conda install pytorch torchvision torchaudio pytorch-cuda=12.4 -c pytorch -c nvidia
 
-# For other CUDA versions, visit: https://pytorch.org
+# Nếu dùng CUDA khác, xem tại: https://pytorch.org
 
-# Install Ultralytics YOLOv11
+# Cài đặt Ultralytics YOLOv11
 cd ultralytics-8.3.225
 pip install -e .
 ```
 
-**Tested Environment:**
+**Môi trường đã kiểm thử:**
 - Python 3.12.6
 - PyTorch 2.6.0 + CUDA 12.4
 - Ultralytics 8.3.225
 
-## Dataset Preparation
+## Chuẩn bị Dataset
 
-See [banana_dataset/README.md](banana_dataset/README.md) for detailed structure and setup instructions.
+Xem [banana_dataset/README.md](banana_dataset/README.md) để biết chi tiết cấu trúc dataset và thống kê số lượng images/bounding box cho từng tập 2024, 2025.
 
 **Model output locations:**
 - Supervised baseline: `experiments/quoccuong_original/YOLOv11-All-Scheme-Flinta/`
-- Semi-supervised: `experiments/quoccuong_original/YOLOv11-All-Scheme-Flinta/` (iterations)
+- Semi-supervised: `experiments/quoccuong_original/YOLOv11-All-Scheme-Flinta/` (theo từng iteration)
 - Augmentation scheme: `experiments/augmentation_matters_semi/scheme1_augmat_general/runs/YOLOv11-AugSeg-Scheme-Fixed/`
 
 ## Training
 
 ### Supervised Baseline Training
-Train YOLOv11 variants using labeled data only:
+Train các biến thể YOLOv11 chỉ với labeled data:
 ```bash
 cd experiments/quoccuong_original
 bash scripts/original_train.sh
 ```
-Trains YOLOv11-Base, YOLOv11-SA-Origin, YOLOv11-SA-Custom for 400 epochs.
+Script này train YOLOv11-Base, YOLOv11-SA-Origin, YOLOv11-SA-Custom trong 400 epochs.
 
 ### Semi-Supervised Iterative Training (Scheme 1)
-Run iterative pseudo-labeling with the original approach:
+Chạy iterative pseudo-labeling theo hướng gốc:
 ```bash
 cd experiments/quoccuong_original
 bash scripts/original_semi_supervised.sh
 ```
 
 ### Semi-Supervised with EMA Teacher (Scheme 2)
-Advanced semi-supervised training with strong augmentation:
+Chạy huấn luyện semi-supervised nâng cao với strong augmentation và ema:
 ```bash
 cd experiments/augmentation_matters_semi/scheme1_augmat_general
 bash scripts/augmat_semi_general.sh
 ```
-Runs 35 iterations with confidence warmup and dynamic pseudo-label sampling.
+Script chạy 35 iterations với confidence warmup và dynamic pseudo-label sampling.
 
 ### Evaluation
-Evaluate trained models:
+Đánh giá mô hình đã train:
 ```bash
 yolo val model=experiments/quoccuong_original/YOLOv11-All-Scheme-Flinta/YOLOv11-Base-400/weights/best.pt \
          data=experiments/quoccuong_original/configs/Banana_Disease_Dataset_Test.yaml \
          imgsz=1024
 ```
 
-## Results
+## Kết quả
 
 | Model | mAP@0.5 | mAP@0.5:0.95 | Precision | Recall |
 |-------|---------|--------------|-----------|--------|
-| YOLOv11-Base | - | - | - | - |
-| YOLOv11-SA-Origin | - | - | - | - |
-| YOLOv11-SA-Custom | - | - | - | - |
-| YOLOv11-SA-Custom-Iter5 | - | - | - | - |
+| YOLOv11-Base | - | - | - | -- |
+| YOLOv11-SA-Origin | - | - | - | -|
+| YOLOv11-SA-Custom | - | - | - | - 
+| YOLOv11-SA-Custom-Iter5 | - | - | - | -|
 
 ## Acknowledgements
-This project is based on the following open-source projects:
+Đồ án này tham khảo và phát triển dựa trên các mã nguồn mở sau:
 - [Ultralytics YOLOv11](https://github.com/ultralytics/ultralytics)
-- Semi-supervised learning techniques for object detection
+- Các kỹ thuật semi-supervised learning cho object detection
 
-We thank their authors for making the source code publicly available.
+Xin cảm ơn tác giả các dự án đã công khai source code.
 
-## Contact
-If you have any problem with our code, feel free to contact
+## Liên hệ
+Nếu bạn gặp vấn đề khi chạy code, có thể liên hệ:
 - phamthanh050204@gmail.com
-
-or describe your problem in Issues.
