@@ -48,15 +48,6 @@ pip install -e .
 
 ## Dataset Preparation
 
-Dataset is organized in `banana_dataset/` folder:
-
-| Directory | Purpose |
-|-----------|---------|
-| `Banana_Dataset_2024_TrainValTest/` | Supervised baseline training (labeled) |
-| `Banana_Dataset_2024_2025/Unlabeled_Images_2025/` | Large unlabeled pool for pseudo-labeling |
-| `Val_Clean/` | Validation set for model evaluation |
-| `Labeled_From_Val/` | Labeled seed data for semi-supervised schemes |
-
 See [banana_dataset/README.md](banana_dataset/README.md) for detailed structure and setup instructions.
 
 **Model output locations:**
