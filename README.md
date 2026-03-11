@@ -18,7 +18,7 @@ Hướng semi-supervised gốc với iterative pseudo-labeling để cải thi�
 ### Scheme 2: EMA-based Semi-Supervised with Augmentation (general)
 Hướng semi-supervised nâng cao dùng khung teacher-student với Exponential Moving Average (EMA) và strong augmentation. Tỉ lệ mẫu pseudo-labeled được tăng dần (2x -> 3x -> 4x theo kích thước labeled set) cùng chiến lược confidence warmup.
 
-**Vị trí**: `experiments/augmentation_matters_semi/scheme1_augmat_general/`  
+**Vị trí**: `experiments/augmentation_matters_semi/`  
 **Chi tiết**: [xem tại đây](experiments/augmentation_matters_semi/README.md)
 
 ### Scheme 3: [Coming Soon]
@@ -53,7 +53,7 @@ Xem [banana_dataset/README.md](banana_dataset/README.md) để biết chi tiết
 **Model output locations:**
 - Supervised baseline: `experiments/quoccuong_original/YOLOv11-All-Scheme-Flinta/`
 - Semi-supervised: `experiments/quoccuong_original/YOLOv11-All-Scheme-Flinta/` (theo từng iteration)
-- Augmentation scheme: `experiments/augmentation_matters_semi/scheme1_augmat_general/runs/YOLOv11-AugSeg-Scheme-Fixed/`
+- Augmentation scheme: `experiments/augmentation_matters_semi/scheme_augmat_general/runs/YOLOv11-AugSeg-Scheme-Fixed/`
 
 ## Training
 
@@ -75,8 +75,8 @@ bash scripts/original_semi_supervised.sh
 ### Semi-Supervised with EMA Teacher (Scheme 2)
 Chạy huấn luyện semi-supervised nâng cao với strong augmentation và ema:
 ```bash
-cd experiments/augmentation_matters_semi/scheme1_augmat_general
-bash scripts/augmat_semi_general.sh
+cd experiments/augmentation_matters_semi
+bash scheme_augmat_general/scripts/augmat_semi_general.sh
 ```
 Script chạy 35 iterations với confidence warmup và dynamic pseudo-label sampling.
 

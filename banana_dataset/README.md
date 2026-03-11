@@ -103,7 +103,7 @@ Toàn bộ 4,114 images trong dataset 2024 đều có bounding box annotations.
 | Dataset               | Images | Số lượng bounding box | Mô tả                                                       |
 | --------------------- | ------ | --------------------- | ----------------------------------------------------------- |
 | Unlabeled_Images_2025 | 5871   | 0              | Unlabeled images dùng để sinh pseudo-label                    |
-| Val_Clean             | 72     | 5380           | Validation dataset dùng để đánh giá scheme1_augmat_general    |
+| Val_Clean             | 72     | 5380           | Validation dataset dùng để đánh giá scheme_augmat_general    |
 | Labeled_From_Val      | 76     | 4907           | Labeled subset dùng làm seed data cho semi-supervised training |
 
 ---
@@ -115,7 +115,7 @@ Toàn bộ 4,114 images trong dataset 2024 đều có bounding box annotations.
 | `Banana_Dataset_2024_TrainValTest/`               | Supervised training dataset (train/val/test splits từ images năm 2024)             |
 | `Banana_Dataset_2024_2025/Unlabeled_Images_2025/` | Unlabeled image pool cho semi-supervised learning                                  |
 | `Banana_Dataset_ValTest_2025/`                    | Validation và test images thu thập trong năm 2025                                  |
-| `Val_Clean/`                                      | Validation dataset đã làm sạch để đánh giá scheme1 augmentation                    |
+| `Val_Clean/`                                      | Validation dataset đã làm sạch để đánh giá scheme augmentation                    |
 | `Labeled_From_Val/`                               | Labeled subset nhỏ tách từ validation data cho các thí nghiệm semi-supervised      |
 
 

@@ -2,7 +2,7 @@
 
 ## Scheme
 
-![Scheme 1](../../resources/scheme1.png)
+![Scheme 1](../../resources/scheme.png)
 
 Trong workflow này:
 - `original_train.sh` là bước train gốc (khởi tạo model ban đầu).
