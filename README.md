@@ -9,17 +9,17 @@ Repository này triển khai nhiều hướng tiếp cận semi-supervised learn
 
 ## Các scheme
 
-### Scheme 1: Iterative Pseudo-Labeling (Baseline)
+### Scheme 1: Iterative Pseudo-Labeling (Original)
 Hướng semi-supervised gốc với iterative pseudo-labeling để cải thiện kết quả khi dữ liệu labeled còn hạn chế. Mô hình sinh pseudo-label trên unlabeled images và tiếp tục tinh chỉnh bằng các dự đoán có confidence cao.
 
 **Vị trí**: `experiments/quoccuong_original/`  
-**Training script**: `bash scripts/original_semi_supervised.sh` (run ở `quoccuong_original`)
+**Chi tiết**: [xem tại đây](experiments/quoccuong_original/README.md)
 
 ### Scheme 2: EMA-based Semi-Supervised with Augmentation (general)
 Hướng semi-supervised nâng cao dùng khung teacher-student với Exponential Moving Average (EMA) và strong augmentation. Tỉ lệ mẫu pseudo-labeled được tăng dần (2x -> 3x -> 4x theo kích thước labeled set) cùng chiến lược confidence warmup.
 
 **Vị trí**: `experiments/augmentation_matters_semi/scheme1_augmat_general/`  
-**Training script**: `bash scripts/augmat_semi_general.sh` (chạy ở `scheme1_augmat_general`)
+**Chi tiết**: [xem tại đây](experiments/augmentation_matters_semi/README.md)
 
 ### Scheme 3: [Coming Soon]
 Scheme semi-supervised thứ ba...
@@ -95,7 +95,7 @@ yolo val model=experiments/quoccuong_original/YOLOv11-All-Scheme-Flinta/YOLOv11-
 | YOLOv11-Base | - | - | - | -- |
 | YOLOv11-SA-Origin | - | - | - | -|
 | YOLOv11-SA-Custom | - | - | - | - 
-| YOLOv11-SA-Custom-Iter5 | - | - | - | -|
+
 
 ## Acknowledgements
 Đồ án này tham khảo và phát triển dựa trên các mã nguồn mở sau:
