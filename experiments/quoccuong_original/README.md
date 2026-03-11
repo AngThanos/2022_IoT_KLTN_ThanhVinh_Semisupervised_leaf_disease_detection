@@ -1,10 +1,10 @@
 # Quoc Cuong Original
 
-## Scheme
+## Scheme 1: Iterative Pseudo-Labeling (Original)
 
-![Scheme 1](../../resources/scheme.png)
+![Scheme 1](../../resources/scheme1.png)
 
-Trong workflow này:
+Trong nhánh này:
 - `original_train.sh` là bước train gốc (khởi tạo model ban đầu).
 - `original_semi_supervised.sh` mới là Scheme semi-supervised (iterative pseudo-labeling): sinh pseudo-label cho `Unlabeled_Images_2025` rồi train lặp theo iteration.
 
