@@ -1,12 +1,29 @@
-# 01 - Cuong Original
+# Quoc Cuong Original
 
-This folder stores the original workflow (legacy code) reorganized for easier management.
+## Scheme
 
-## Includes
-- `scripts/original_train.sh`: run original supervised baseline training.
-- `scripts/original_semi_supervised.sh`: run original iterative semi-supervised training.
-- `configs/`: dataset YAML files used by this scheme (`Banana_Disease_Dataset*.yaml`).
+![Scheme 1](../../resources/scheme1.png)
 
-## Notes
-- Scripts are self-contained for this folder and intended to run from `quoccuong_original`.
-- You can gradually migrate logic from legacy scripts into this folder later.
+Trong workflow này:
+- `original_train.sh` là bước train gốc (khởi tạo model ban đầu).
+- `original_semi_supervised.sh` mới là Scheme semi-supervised (iterative pseudo-labeling): sinh pseudo-label cho `Unlabeled_Images_2025` rồi train lặp theo iteration.
+
+## Lệnh chạy
+
+```bash
+cd experiments/quoccuong_original
+```
+
+Train gốc:
+
+```bash
+bash scripts/original_train.sh
+```
+
+Chạy Scheme semi-supervised:
+
+```bash
+bash scripts/original_semi_supervised.sh
+```
+
+
