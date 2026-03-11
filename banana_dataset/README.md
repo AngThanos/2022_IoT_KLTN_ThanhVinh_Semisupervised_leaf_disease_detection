@@ -8,12 +8,58 @@ Cấu trúc dataset dùng cho bài toán semi-supervised YOLO nhằm phát hiệ
 
 ### Tổng quan (2024 vs 2025)
 
-| Dataset     | Train | Validation | Test | Tổng số images | Images có bounding box | Số lượng bounding box |
-| ----------- | ----- | ---------- | ---- | -------------- | ---------------------- | --------------------- |
-| Banana 2024 | 2633  | 658        | 823  | 4114      | 4114            | 36474       |
-| Banana 2025 (labeled) | 0     | 146        | 181  | 327       | 323      | 25058       |
-| Banana 2025 (unlabeled) | 0 | 0 | 0 | 5871 | 0 | 0 |
-| **Banana 2025 (tổng)** | **0** | **146** | **181** | **6198** | **323** | **25058** |
+<table>
+	<thead>
+		<tr>
+			<th colspan="2">Dataset</th>
+			<th>Train</th>
+			<th>Validation</th>
+			<th>Test</th>
+			<th>Total Images</th>
+			<th>Images with Bounding Boxes</th>
+			<th>Total Bounding Boxes</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td colspan="2">Banana 2024</td>
+			<td>2633</td>
+			<td>658</td>
+			<td>823</td>
+			<td>4114</td>
+			<td>4114</td>
+			<td>36474</td>
+		</tr>
+		<tr>
+			<td rowspan="2">Banana 2025</td>
+			<td>Labeled</td>
+			<td>0</td>
+			<td>146</td>
+			<td>181</td>
+			<td>327</td>
+			<td>323</td>
+			<td>25058</td>
+		</tr>
+		<tr>
+			<td>Unlabeled</td>
+			<td>5871</td>
+			<td>0</td>
+			<td>0</td>
+			<td>5871</td>
+			<td>0</td>
+			<td>0</td>
+		</tr>
+		<tr>
+			<td colspan="2"><strong>Banana 2025 (Total)</strong></td>
+			<td>5871</td>
+			<td><strong>146</strong></td>
+			<td><strong>181</strong></td>
+			<td><strong>6198</strong></td>
+			<td><strong>323</strong></td>
+			<td><strong>25058</strong></td>
+		</tr>
+	</tbody>
+</table>
 
 Ghi chú:
 - Banana 2025 không có tập train được gán nhãn; phần `Unlabeled_Images_2025` được dùng cho pseudo-labeling trong semi-supervised learning.
