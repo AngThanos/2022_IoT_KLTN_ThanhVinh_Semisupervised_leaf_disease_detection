@@ -74,7 +74,7 @@ def yolo_collate_fn(batch):
 
 class yolo_dset(BaseDataset):
     def __init__(self, data_root, data_list, trs_form, trs_form_strong=None, 
-        seed=0, n_sup=5866, split="val", flag_semi=False,
+        seed=0, n_sup=2975, split="val", flag_semi=False,
         mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]
     ):
         super(yolo_dset, self).__init__(data_list)
@@ -207,7 +207,7 @@ def build_yololoader(split, all_cfg, seed=0):
     # set up workers and batchsize
     workers = cfg.get("workers", 2)
     batch_size = cfg.get("batch_size", 1)
-    n_sup = cfg.get("n_sup", 5866)
+    n_sup = cfg.get("n_sup", 2975)
 
     # build transform
     mean, std = cfg["mean"], cfg["std"]
@@ -243,7 +243,7 @@ def build_semi_yololoader(split, all_cfg, seed=0):
     workers = cfg.get("workers", 2) 
     batch_size = cfg.get("batch_size", 2)
     # n_sup is the number of supervised samples to use directly.
-    n_sup = 5866 - cfg.get("n_sup", 5866)
+    n_sup = cfg.get("n_sup", 2975)
 
     # build transform
     mean, std = cfg["mean"], cfg["std"]

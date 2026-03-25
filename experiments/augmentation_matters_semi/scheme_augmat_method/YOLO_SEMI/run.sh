@@ -6,7 +6,7 @@ cd "$(dirname "$0")"
 # Activate virtual environment
 # source ../../AugSeg/AugSeg/venv/bin/activate
 
-CONFIG=${1:-"/home/jupyter-iec2021iot13/Vinh/AugSeg_Remake/exps/yolov11-base-400-test/config_semi.yaml"}
+CONFIG=${1:-"exps/yolov11-base-400/config_semi.yaml"}
 GPUS=${2:-1}
 PORT=${3:-29500}
 SEED=${4:-42}
