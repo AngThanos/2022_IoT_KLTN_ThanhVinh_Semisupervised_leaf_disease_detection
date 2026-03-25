@@ -41,7 +41,7 @@ Cấu trúc dataset dùng cho bài toán semi-supervised YOLO nhằm phát hiệ
 			<td>327</td>
 			<td>323</td>
 			<td>25058</td>
-			<td colspan="3">1.3G</td>
+			<td rowspan="3">1.3G</td>
 		</tr>
 		<tr>
 			<td>Unlabeled</td>
