@@ -1,0 +1,9 @@
+./data
+data/
+./exps/
+./pretrained/
+*.pyc
+*.log
+*log/
+*checkpoints/
+__pycache__/
