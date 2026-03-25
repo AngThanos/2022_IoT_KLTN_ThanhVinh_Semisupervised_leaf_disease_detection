@@ -18,6 +18,7 @@ Cấu trúc dataset dùng cho bài toán semi-supervised YOLO nhằm phát hiệ
 			<th>Total Images</th>
 			<th>Images with Bounding Boxes</th>
 			<th>Total Bounding Boxes</th>
+			<th>Tatal Size</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -29,9 +30,10 @@ Cấu trúc dataset dùng cho bài toán semi-supervised YOLO nhằm phát hiệ
 			<td>4114</td>
 			<td>4114</td>
 			<td>36474</td>
+			<td>2.6G</td>
 		</tr>
 		<tr>
-			<td rowspan="2">Banana 2025</td>
+			<td rowspan="3">Banana 2025</td>
 			<td>Labeled</td>
 			<td>0</td>
 			<td>146</td>
@@ -39,6 +41,7 @@ Cấu trúc dataset dùng cho bài toán semi-supervised YOLO nhằm phát hiệ
 			<td>327</td>
 			<td>323</td>
 			<td>25058</td>
+			<td colspan="3">1.3G</td>
 		</tr>
 		<tr>
 			<td>Unlabeled</td>
@@ -50,7 +53,7 @@ Cấu trúc dataset dùng cho bài toán semi-supervised YOLO nhằm phát hiệ
 			<td>0</td>
 		</tr>
 		<tr>
-			<td colspan="2"><strong>Banana 2025 (Total)</strong></td>
+			<td>(Total)</td>
 			<td>5871</td>
 			<td><strong>146</strong></td>
 			<td><strong>181</strong></td>
