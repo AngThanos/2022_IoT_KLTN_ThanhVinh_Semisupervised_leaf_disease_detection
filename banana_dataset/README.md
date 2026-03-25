@@ -53,7 +53,7 @@ Cấu trúc dataset dùng cho bài toán semi-supervised YOLO nhằm phát hiệ
 			<td>0</td>
 		</tr>
 		<tr>
-			<td>(Total)</td>
+			<td>Total</td>
 			<td>5871</td>
 			<td><strong>146</strong></td>
 			<td><strong>181</strong></td>
