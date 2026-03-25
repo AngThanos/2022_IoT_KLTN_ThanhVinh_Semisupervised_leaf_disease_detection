@@ -2,7 +2,7 @@
 
 ## Scheme 2: EMA-based Semi-Supervised with Augmentation (general)
 
-![Scheme 2](../../resources/scheme2.png)
+![Scheme 2](../../../resources/scheme2.png)
 
 Trong nhánh này:
 - `scheme_augmat_general/scripts/augmat_semi_general.sh` là script semi-supervised theo khung teacher-student.
