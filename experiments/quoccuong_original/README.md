@@ -118,7 +118,7 @@ yolo val \
 # - Comment lại dòng 2024:
 #   val: banana_dataset/Banana_Dataset_2024_TrainValTest/test/
 
-# Chạy val ngắn gọn theo đúng naming trong original_semi_supervised.sh
+# Chạy val tương tự ở trên và thay từng model vào hoặc chạy nhanh như này:
 for prefix in YOLOv11-Base-400 YOLOv11-SA-Origin-400 YOLOv11-SA-Custom-400
 do
 	for ckpt in \
@@ -134,7 +134,7 @@ done
 
 ```
 
-Sau khi val ra kết quả, mình tự chọn run có mAP50-95 cao nhất cho từng model rồi điền các chỉ số tương ứng vào bảng 2025.
+Sau khi val ra kết quả, tự chọn run có mAP50-95 cao nhất
 
 ### Bộ dữ liệu 2025 (chưa gán nhãn) - Ngưỡng tin cậy 1%
 
