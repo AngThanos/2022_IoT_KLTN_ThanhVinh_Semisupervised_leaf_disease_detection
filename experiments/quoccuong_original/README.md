@@ -26,7 +26,86 @@ Chạy Scheme semi-supervised:
 bash scripts/original_semi_supervised.sh
 ```
 
+## Lệnh đánh giá
+
+Từ thư mục `experiments/quoccuong_original`, chạy:
+
+```bash
+# YOLOv11-Base
+yolo val \
+	data=configs/Banana_Disease_Dataset_Test.yaml \
+	model=YOLOv11-All-Scheme-Flinta/YOLOv11-Base-400/weights/best.pt \
+	imgsz=1024 \
+	exist_ok=True \
+	conf=0.1 \
+	iou=0.1 \
+	agnostic_nms=True
+
+# YOLOv11-SA-Origin
+yolo val \
+	data=configs/Banana_Disease_Dataset_Test.yaml \
+	model=YOLOv11-All-Scheme-Flinta/YOLOv11-SA-Origin-400/weights/best.pt \
+	imgsz=1024 \
+	exist_ok=True \
+	conf=0.1 \
+	iou=0.1 \
+	agnostic_nms=True
+
+# YOLOv11-SA-Custom
+yolo val \
+	data=configs/Banana_Disease_Dataset_Test.yaml \
+	model=YOLOv11-All-Scheme-Flinta/YOLOv11-SA-Custom-400/weights/best.pt \
+	imgsz=1024 \
+	exist_ok=True \
+	conf=0.1 \
+	iou=0.1 \
+	agnostic_nms=True
+```
+
 ## Bảng kết quả
+
+### Bộ dữ liệu 2024 (đã gán nhãn)
+
+<table>
+	<thead>
+		<tr>
+			<th>Trọng số mất mát</th>
+			<th>Mô hình</th>
+			<th>Độ chính xác</th>
+			<th>Độ nhạy</th>
+			<th>mAP0.5</th>
+			<th>mAP0.5:0.95</th>
+			<th>F1-score</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td rowspan="3">-</td>
+			<td>YOLOv11</td>
+			<td>79.4</td>
+			<td>74.6</td>
+			<td>81.1</td>
+			<td>54.1</td>
+			<td>76.9</td>
+		</tr>
+		<tr>
+			<td>YOLOv11-SA</td>
+			<td>79.3</td>
+			<td>74.7</td>
+			<td>81.6</td>
+			<td>54.7</td>
+			<td>76.9</td>
+		</tr>
+		<tr>
+			<td>YOLOv11-SA custom</td>
+			<td>78.8</td>
+			<td>75.6</td>
+			<td>81.5</td>
+			<td>54.4</td>
+			<td>77.2</td>
+		</tr>
+	</tbody>
+</table>
 
 ### Bộ dữ liệu 2025 (chưa gán nhãn) - Ngưỡng tin cậy 1%
 
