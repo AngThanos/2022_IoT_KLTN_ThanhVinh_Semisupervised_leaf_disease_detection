@@ -30,6 +30,8 @@ bash scripts/original_semi_supervised.sh
 
 Từ thư mục `experiments/quoccuong_original`, chạy:
 
+### Đánh giá tập 2024 (đã gán nhãn)
+
 ```bash
 # YOLOv11-Base
 yolo val \
@@ -106,6 +108,33 @@ yolo val \
 		</tr>
 	</tbody>
 </table>
+
+### Đánh giá tập 2025 (chạy theo từng iter, chọn kết quả tốt nhất)
+
+```bash
+# Trong configs/Banana_Disease_Dataset_Test.yaml:
+# - Bỏ comment dòng 2025:
+#   val: banana_dataset/Banana_Dataset_ValTest_2025/test_each1
+# - Comment lại dòng 2024:
+#   val: banana_dataset/Banana_Dataset_2024_TrainValTest/test/
+
+# Chạy val ngắn gọn theo đúng naming trong original_semi_supervised.sh
+for prefix in YOLOv11-Base-400 YOLOv11-SA-Origin-400 YOLOv11-SA-Custom-400
+do
+	for ckpt in \
+		YOLOv11-All-Scheme-Flinta/${prefix}/weights/best.pt \
+		YOLOv11-All-Scheme-Flinta/${prefix}-Iter*/weights/best.pt \
+		YOLOv11-All-Scheme-Flinta/${prefix}-Conf001-Iter*/weights/best.pt
+	do
+		[ -f "$ckpt" ] || continue
+		run_name=$(basename "$(dirname "$(dirname "$ckpt")")")
+		yolo val data=configs/Banana_Disease_Dataset_Test.yaml model="$ckpt" imgsz=1024 exist_ok=True conf=0.1 iou=0.1 agnostic_nms=True project="YOLOv11-Val-2025-${prefix}" name="$run_name"
+	done
+done
+
+```
+
+Sau khi val ra kết quả, mình tự chọn run có mAP50-95 cao nhất cho từng model rồi điền các chỉ số tương ứng vào bảng 2025.
 
 ### Bộ dữ liệu 2025 (chưa gán nhãn) - Ngưỡng tin cậy 1%
 
