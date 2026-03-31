@@ -127,7 +127,7 @@ python convert_pth_to_pt.py \
 
 Sau khi val ra kết quả, tự chọn run có mAP50-95 cao nhất
 
-### Bộ dữ liệu 2025 (chưa gán nhãn) - Ngưỡng tin cậy 25% (theo code hiện tại)
+### Bộ dữ liệu 2025 (chưa gán nhãn) - Ngưỡng tin cậy 25% 
 
 Ghi chú: trong code hiện tại, ngưỡng pseudo-label được đọc từ `trainer.unsupervised.threshold` và đang đặt `0.25`.
 
@@ -218,99 +218,6 @@ Ghi chú: trong code hiện tại, ngưỡng pseudo-label được đọc từ `
             <td>40.1</td>
             <td>17.7</td>
             <td>45.3</td>
-        </tr>
-    </tbody>
-</table>
-
-### Bộ dữ liệu 2025 (chưa gán nhãn) - Ngưỡng tin cậy 25%
-
-<table>
-    <thead>
-        <tr>
-            <th>Trọng số mất mát</th>
-            <th>Mô hình</th>
-            <th>Độ chính xác</th>
-            <th>Độ nhạy</th>
-            <th>mAP0.5</th>
-            <th>mAP0.5:0.95</th>
-            <th>F1-score</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td rowspan="3">BCE</td>
-            <td>YOLOv11</td>
-            <td>72.7</td>
-            <td>11.0</td>
-            <td>41.0</td>
-            <td>21.7</td>
-            <td>19.1</td>
-        </tr>
-        <tr>
-            <td>YOLOv11-SA</td>
-            <td>73.1</td>
-            <td>16.4</td>
-            <td>44.1</td>
-            <td>22.3</td>
-            <td>26.8</td>
-        </tr>
-        <tr>
-            <td>YOLOv11-SA custom</td>
-            <td>71.9</td>
-            <td>14.4</td>
-            <td>42.3</td>
-            <td>21.2</td>
-            <td>24.0</td>
-        </tr>
-        <tr>
-            <td rowspan="3">Varifocal</td>
-            <td>YOLOv11</td>
-            <td>49.9</td>
-            <td>41.9</td>
-            <td>41.9</td>
-            <td>19.0</td>
-            <td>45.6</td>
-        </tr>
-        <tr>
-            <td>YOLOv11-SA</td>
-            <td>46.2</td>
-            <td>42.1</td>
-            <td>40.4</td>
-            <td>18.2</td>
-            <td>44.1</td>
-        </tr>
-        <tr>
-            <td>YOLOv11-SA custom</td>
-            <td>51.2</td>
-            <td>44.3</td>
-            <td>44.2</td>
-            <td>19.5</td>
-            <td>47.5</td>
-        </tr>
-        <tr>
-            <td rowspan="3">Varifocal Custom</td>
-            <td>YOLOv11</td>
-            <td>50.7</td>
-            <td>44.1</td>
-            <td>45.0</td>
-            <td>20.6</td>
-            <td>47.2</td>
-        </tr>
-        <tr>
-            <td>YOLOv11-SA</td>
-            <td>48.9</td>
-            <td>45.5</td>
-            <td>45.3</td>
-            <td>20.3</td>
-            <td>47.1</td>
-        </tr>
-        <tr>
-            <td>YOLOv11-SA custom</td>
-            <td>50.7</td>
-            <td>45.7</td>
-            <td>46.4</td>
-            <td>21.2</td>
-            <td>48.1</td>
         </tr>
     </tbody>
 </table>
