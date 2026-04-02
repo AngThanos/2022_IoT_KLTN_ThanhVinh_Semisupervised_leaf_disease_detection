@@ -3,7 +3,7 @@
 
 ## Scheme 3
 
-![Scheme 3](../../../../resources/Scheme3.png)
+![Scheme 3](../../../resources/Scheme3.png)
 
 Trong nhánh này:
 - `train_yolo_simple.py` là bước train gốc (baseline YOLO thường).
