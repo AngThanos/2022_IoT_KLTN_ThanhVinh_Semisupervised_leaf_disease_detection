@@ -21,3 +21,4 @@ bash scheme_augmat_general/scripts/augmat_semi_general.sh
 Lưu ý:
 - Script mặc định lấy checkpoint base từ `experiments/quoccuong_original/YOLOv11-All-Scheme-Flinta/YOLOv11-Base-400/weights/best.pt`.
 - Cần chạy train gốc trước tại `experiments/quoccuong_original/scripts/original_train.sh` để có checkpoint khởi tạo.
+

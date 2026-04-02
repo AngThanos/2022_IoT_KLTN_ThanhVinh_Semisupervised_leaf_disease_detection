@@ -1,9 +1,9 @@
 # Augmentation Matters Semi
 # YOLO_SEMI
 
-## Scheme 1: Iterative Pseudo-Labeling (YOLO_SEMI)
+## Scheme 3
 
-![Scheme 1](../../resources/schem.png)
+![Scheme 3](../../../../resources/Scheme3.png)
 
 Trong nhánh này:
 - `train_yolo_simple.py` là bước train gốc (baseline YOLO thường).
