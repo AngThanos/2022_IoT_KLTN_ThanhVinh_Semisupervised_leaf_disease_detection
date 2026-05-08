@@ -106,7 +106,6 @@ yolo val \
 <table>
 <thead>
 <tr>
-<th>Bộ dữ liệu</th>
 <th>Ngưỡng tin cậy</th>
 <th>Trọng số mất mát</th>
 <th>Mô hình</th>
@@ -119,7 +118,6 @@ yolo val \
 </thead>
 <tbody>
 <tr>
-<td rowspan="27">2025 (chưa gán nhãn)</td>
 <td rowspan="9">1%</td>
 <td rowspan="3">BCE</td>
 <td>YOLOv11</td>
