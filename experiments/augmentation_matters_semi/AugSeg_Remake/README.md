@@ -1,64 +1,54 @@
-# Augmentation Matters Semi
-# YOLO_SEMI
-
-## Scheme 3
+# YOLO_SEMI — AugSeg cho YOLO Detection
 
 ![Scheme 3](../../../resources/ppAug_Remake.png)
 
-Trong nhánh này:
-- `train_yolo_simple.py` là bước train gốc (baseline YOLO thường).
-- `train_semi.py` (hoặc `run.sh`) là Scheme semi-supervised (iterative pseudo-labeling): teacher sinh pseudo-label cho ảnh unlabeled rồi train lặp theo epoch.
 
-## Lệnh chạy
+**Tham khảo:**
+- AugSeg (CVPR 2023) — code gốc: <https://github.com/zhenzhao/AugSeg>
+- Paper: *Augmentation Matters: A Simple-Yet-Effective Approach to Semi-Supervised Semantic Segmentation* — <https://openaccess.thecvf.com/content/CVPR2023/papers/Zhao_Augmentation_Matters_A_Simple-Yet-Effective_Approach_to_Semi-Supervised_Semantic_Segmentation_CVPR_2023_paper.pdf>
+
+## 1. Huấn luyện
 
 ```bash
 cd AugSeg_Remake/YOLO_SEMI
 ```
 
-Train gốc:
+### 1.1. Train có giám sát (baseline)
 
 ```bash
 python train_yolo_simple.py
 ```
 
-Chạy Scheme semi-supervised:
+### 1.2. Train bán giám sát (Teacher–Student với weak/strong augmentation)
+
+Script `run.sh` nhận tham số `CONFIG GPUS PORT SEED`:
 
 ```bash
-bash run.sh exps/release/vfl_custom/yolov11-sa-custom/config_semi.yaml 1 29500 42
+bash run.sh ../exps/conf_025/varifocal_custom/yolov11-sa-custom/config_semi.yaml 1 29500 42
 ```
 
-**Bước trước khi chạy - Sửa config:**
+**Trước khi chạy — cấu hình cần sửa:**
 
-Mở file config (ví dụ `exps/release/vfl_custom/yolov11-sa-custom/config_semi.yaml`) và sửa:
-1. Đường dẫn dữ liệu `train.data_root` và `train.data_list` → trỏ tới folder unlabeled
-2. Đường dẫn validation `val.data_root` và `val.data_list` → trỏ tới tập đánh giá 2025
-3. `unsupervised.threshold: 0.25` → điều chỉnh ngưỡng pseudo-label nếu cần
+Mở file config tương ứng (ví dụ `../exps/conf_025/varifocal_custom/yolov11-sa-custom/config_semi.yaml`) và sửa:
+1. `dataset.train.data_root` và `dataset.train.data_list` → trỏ tới folder ảnh có nhãn / unlabeled.
+2. `dataset.val.data_root` và `dataset.val.data_list` → trỏ tới tập đánh giá.
+3. `trainer.unsupervised.threshold` (mặc định `0.25`) → điều chỉnh ngưỡng pseudo-label nếu cần.
+4. `net.encoder.pretrain` → trỏ tới file `.pt` pretrained tương ứng trong `models/`.
 
-## Lệnh đánh giá
+## 2. Đánh giá
 
-Sau khi train xong, lấy checkpoint tốt nhất từ folder `checkpoints/ckpt_best.pth`, rồi chạy 2 bước:
+Sau khi train xong, trong thư mục snapshot của exp tương ứng (`saver.snapshot_dir` trong config, ví dụ `checkpoint/` hoặc `checkpoints/`) sẽ có:
+- `best.pt` — teacher EMA tại epoch tốt nhất, lưu theo định dạng Ultralytics, dùng trực tiếp với `yolo val` / `YOLO('best.pt')`.
+- `best_student.pt` — student tại epoch tốt nhất, cùng định dạng Ultralytics.
+- `last.pt` — teacher EMA tại epoch cuối, định dạng Ultralytics.
+- `ckpt_best.pt`, `ckpt.pt` — checkpoint nội bộ của vòng train (chứa `model_state`, `optimizer_state`, `teacher_state`, `epoch`, ...), dùng để resume training, không nạp trực tiếp bằng `YOLO(...)` được.
 
-### Bước 1: Convert `.pth` sang `.pt`
-
-```bash
-python convert_pth_to_pt.py \
-    --weights exps/release/vfl_custom/yolov11-sa-custom/checkpoints/ckpt_best.pth \
-    --pretrain YOLO_SEMI/models/YOLOv11-SA-Custom-400/best.pt \
-    --state-key teacher_state \
-    --out exps/release/vfl_custom/yolov11-sa-custom/checkpoints/ckpt_best_teacher.pt
-```
-
-**Sửa đường dẫn theo model:**
-- `--weights`: đường dẫn checkpoint `.pth` sau khi train
-- `--pretrain`: đường dẫn file `.pt` pretrained dùng khi init model  
-- `--out`: nơi lưu file `.pt` đã convert
-
-### Bước 2: Đánh giá bằng `yolo val`
+### 2.1. Đánh giá bằng `yolo val`
 
 ```bash
 yolo val \
     data=Banana_Disease_Dataset_Test.yaml \
-    model=exps/release/vfl_custom/yolov11-sa-custom/checkpoints/ckpt_best_teacher.pt \
+    model=../exps/dynamic/varifocal_custom/yolov11/checkpoint/best.pt \
     imgsz=1024 \
     conf=0.1 \
     iou=0.1 \
@@ -67,11 +57,11 @@ yolo val \
 ```
 
 **Sửa đường dẫn theo model:**
-- `data=...`: dataset yaml (chứa đường dẫn tập 2025 unlabeled hoặc test)
-- `model=...`: đường dẫn file `.pt` vừa convert ở bước 1
+- `data=...`: dataset yaml (chứa đường dẫn tập test)
+- `model=...`: đường dẫn file `.pt` checkpoint cần đánh giá
 - `imgsz`, `conf`, `iou`, ... → điều chỉnh tham số đánh giá nếu cần
 
-## Bảng kết quả
+## 3. Kết quả
 
 
 Ghi chú: trong code hiện tại, ngưỡng pseudo-label được đọc từ `trainer.unsupervised.threshold` và đang đặt `0.25`.
