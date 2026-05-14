@@ -121,67 +121,67 @@ yolo val \
 <td rowspan="9">1%</td>
 <td rowspan="3">BCE</td>
 <td>YOLOv11</td>
-<td>56.8</td><td>50.8</td><td>51.5</td><td>22.5</td><td>00</td>
+<td>56.8</td><td>50.8</td><td>51.5</td><td>22.5</td><td>53.6</td>
 </tr>
-<tr><td>YOLOv11-SA</td><td>54.2</td><td>49.7</td><td>47.0</td><td>20.6</td><td>00</td></tr>
-<tr><td>YOLOv11-SA custom</td><td><b>54.3</b></td><td><b>51.1</b></td><td><b>48.8</b></td><td><b>21.5</b></td><td><b>00</b></td></tr>
+<tr><td>YOLOv11-SA</td><td>54.2</td><td>49.7</td><td>47.0</td><td>20.6</td><td>51.9</td></tr>
+<tr><td>YOLOv11-SA custom</td><td><b>54.3</b></td><td><b>51.1</b></td><td><b>48.8</b></td><td><b>21.5</b></td><td><b>52.7</b></td></tr>
 <tr>
 <td rowspan="3">Varifocal</td>
 <td>YOLOv11</td>
-<td><b>53.4</b></td><td>49.7</td><td>49.0</td><td>22.1</td><td>00</td>
+<td><b>53.4</b></td><td>49.7</td><td>49.0</td><td>22.1</td><td>51.5</td>
 </tr>
-<tr><td>YOLOv11-SA</td><td><b>54.7</b></td><td>49.3</td><td>48.8</td><td>22.1</td><td><b>00</b></td></tr>
-<tr><td>YOLOv11-SA custom</td><td>48.6</td><td><b>47.9</b></td><td><b>44.9</b></td><td><b>19.8</b></td><td>00</td></tr>
+<tr><td>YOLOv11-SA</td><td><b>54.7</b></td><td>49.3</td><td>48.8</td><td>22.1</td><td><b>51.9</b></td></tr>
+<tr><td>YOLOv11-SA custom</td><td>48.6</td><td><b>47.9</b></td><td><b>44.9</b></td><td><b>19.8</b></td><td>48.2</td></tr>
 <tr>
 <td rowspan="3">Varifocal Custom</td>
 <td>YOLOv11</td>
-<td>53.5</td><td>49.9</td><td>49.2</td><td><b>22.1</b></td><td>00</td>
+<td>53.5</td><td>49.9</td><td>49.2</td><td><b>22.1</b></td><td>51.6</td>
 </tr>
-<tr><td>YOLOv11-SA</td><td>54.2</td><td>47.3</td><td>47.7</td><td>21.5</td><td>00</td></tr>
-<tr><td>YOLOv11-SA custom</td><td><b>48.6</b></td><td><b>47.7</b></td><td><b>45.6</b></td><td>20.1</td><td><b>00</b></td></tr>
+<tr><td>YOLOv11-SA</td><td>54.2</td><td>47.3</td><td>47.7</td><td>21.5</td><td>50.5</td></tr>
+<tr><td>YOLOv11-SA custom</td><td><b>48.6</b></td><td><b>47.7</b></td><td><b>45.6</b></td><td>20.1</td><td><b>48.1</b></td></tr>
 <tr>
 <td rowspan="9">25%</td>
 <td rowspan="3">BCE</td>
 <td>YOLOv11</td>
-<td>54.8</td><td>48.7</td><td>48.0</td><td>21.2</td><td>00</td>
+<td>54.8</td><td>48.7</td><td>48.0</td><td>21.2</td><td>51.6</td>
 </tr>
-<tr><td>YOLOv11-SA</td><td>44.0</td><td>47.9</td><td>36.5</td><td>15.5</td><td>00</td></tr>
-<tr><td>YOLOv11-SA custom</td><td><b>38.7</b></td><td><b>46.8</b></td><td><b>31.7</b></td><td><b>13.6</b></td><td><b>00</b></td></tr>
+<tr><td>YOLOv11-SA</td><td>44.0</td><td>47.9</td><td>36.5</td><td>15.5</td><td>45.9</td></tr>
+<tr><td>YOLOv11-SA custom</td><td><b>38.7</b></td><td><b>46.8</b></td><td><b>31.7</b></td><td><b>13.6</b></td><td><b>42.4</b></td></tr>
 <tr>
 <td rowspan="3">Varifocal</td>
 <td>YOLOv11</td>
-<td><b>48.5</b></td><td>48.0</td><td>42.7</td><td>18.4</td><td>00</td>
+<td><b>48.5</b></td><td>48.0</td><td>42.7</td><td>18.4</td><td>48.2</td>
 </tr>
-<tr><td>YOLOv11-SA</td><td><b>46.2</b></td><td>46.9</td><td>41.1</td><td>18.1</td><td><b>00</b></td></tr>
-<tr><td>YOLOv11-SA custom</td><td>44.6</td><td><b>47.8</b></td><td><b>40.3</b></td><td><b>17.4</b></td><td>00</td></tr>
+<tr><td>YOLOv11-SA</td><td><b>46.2</b></td><td>46.9</td><td>41.1</td><td>18.1</td><td><b>46.5</b></td></tr>
+<tr><td>YOLOv11-SA custom</td><td>44.6</td><td><b>47.8</b></td><td><b>40.3</b></td><td><b>17.4</b></td><td>46.1</td></tr>
 <tr>
 <td rowspan="3">Varifocal Custom</td>
 <td>YOLOv11</td>
-<td>48.3</td><td>47.5</td><td>42.9</td><td><b>18.7</b></td><td>00</td>
+<td>48.3</td><td>47.5</td><td>42.9</td><td><b>18.7</b></td><td>47.9</td>
 </tr>
-<tr><td>YOLOv11-SA</td><td>45.4</td><td>47.2</td><td>40.4</td><td>17.5</td><td>00</td></tr>
-<tr><td>YOLOv11-SA custom</td><td><b>47.6</b></td><td><b>43.5</b></td><td><b>40.2</b></td><td>17.2</td><td><b>00</b></td></tr>
+<tr><td>YOLOv11-SA</td><td>45.4</td><td>47.2</td><td>40.4</td><td>17.5</td><td>46.3</td></tr>
+<tr><td>YOLOv11-SA custom</td><td><b>47.6</b></td><td><b>43.5</b></td><td><b>40.2</b></td><td>17.2</td><td><b>45.5</b></td></tr>
 <tr>
 <td rowspan="9">dynamic</td>
 <td rowspan="3">BCE</td>
 <td>YOLOv11</td>
-<td>59.4</td><td>49.9</td><td>51.8</td><td>24.3</td><td>00</td>
+<td>59.4</td><td>49.9</td><td>51.8</td><td>24.3</td><td>54.2</td>
 </tr>
-<tr><td>YOLOv11-SA</td><td>50.2</td><td>47.0</td><td>42.4</td><td>18.5</td><td>00</td></tr>
-<tr><td>YOLOv11-SA custom</td><td><b>57.5</b></td><td><b>51.8</b></td><td><b>52.6</b></td><td><b>23.5</b></td><td><b>00</b></td></tr>
+<tr><td>YOLOv11-SA</td><td>50.2</td><td>47.0</td><td>42.4</td><td>18.5</td><td>48.5</td></tr>
+<tr><td>YOLOv11-SA custom</td><td><b>57.5</b></td><td><b>51.8</b></td><td><b>52.6</b></td><td><b>23.5</b></td><td><b>54.5</b></td></tr>
 <tr>
 <td rowspan="3">Varifocal</td>
 <td>YOLOv11</td>
-<td><b>47.8</b></td><td>48.0</td><td>43.2</td><td>19.1</td><td>00</td>
+<td><b>47.8</b></td><td>48.0</td><td>43.2</td><td>19.1</td><td>47.9</td>
 </tr>
-<tr><td>YOLOv11-SA</td><td><b>46.1</b></td><td>47.4</td><td>41.6</td><td>18.1</td><td><b>00</b></td></tr>
-<tr><td>YOLOv11-SA custom</td><td>44.7</td><td><b>47.1</b></td><td><b>40.3</b></td><td><b>17.5</b></td><td>00</td></tr>
+<tr><td>YOLOv11-SA</td><td><b>46.1</b></td><td>47.4</td><td>41.6</td><td>18.1</td><td><b>46.7</b></td></tr>
+<tr><td>YOLOv11-SA custom</td><td>44.7</td><td><b>47.1</b></td><td><b>40.3</b></td><td><b>17.5</b></td><td>45.9</td></tr>
 <tr>
 <td rowspan="3">Varifocal Custom</td>
 <td>YOLOv11</td>
-<td>43.9</td><td>47.0</td><td>39.7</td><td><b>17.6</b></td><td>00</td>
+<td>43.9</td><td>47.0</td><td>39.7</td><td><b>17.6</b></td><td>45.4</td>
 </tr>
-<tr><td>YOLOv11-SA</td><td>47.2</td><td>45.8</td><td>40.8</td><td>17.5</td><td>00</td></tr>
-<tr><td>YOLOv11-SA custom</td><td><b>45.1</b></td><td><b>46.8</b></td><td><b>40.7</b></td><td>17.8</td><td><b>00</b></td></tr>
+<tr><td>YOLOv11-SA</td><td>47.2</td><td>45.8</td><td>40.8</td><td>17.5</td><td>46.5</td></tr>
+<tr><td>YOLOv11-SA custom</td><td><b>45.1</b></td><td><b>46.8</b></td><td><b>40.7</b></td><td>17.8</td><td><b>45.9</b></td></tr>
 </tbody>
 </table>
