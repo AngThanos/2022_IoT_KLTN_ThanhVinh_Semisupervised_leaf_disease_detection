@@ -1,0 +1,63 @@
+# ═══════════════════════════════════════════════════════════
+#  AD-MT + iMAS-style data loading for YOLO detection
+#  Config for banana_data semi-supervised training
+# ═══════════════════════════════════════════════════════════
+
+# 1. Paths
+root_path: "/home/jupyter-iec2021iot13/Vinh/iMAS_Remake/data/banana_data"
+dataset_yaml: "/home/jupyter-iec2021iot13/Vinh/iMAS_Remake/data/banana_data/meta/dataset_supervised.yaml"
+res_path: "./results/banana"
+exp: "admt_yolo"
+model: "/home/jupyter-iec2021iot13/Vinh/iMAS_Remake/models/YOLOv11-SA-Custom-400/best.pt"
+model_tag: "yolov11-sa-custom-400"   # tên thư mục con dưới res_path/exp/ (đặt ngắn gọn)
+
+# 2. Data
+img_size: 1024
+batch_size_lb: 4          # labeled images per iteration
+batch_size_ulb: 4         # unlabeled images per iteration
+num_workers: 4
+num_strong_augs: 2        # number of random strong augs per unlabeled image
+
+# 3. Training
+seed: 2023
+deterministic: False
+max_iterations: 50000
+base_lr: 0.01
+poly: True
+use_amp: True
+test_interval_ep: 2
+
+# 4. Semi-supervised / EMA
+ema_decay: 0.999
+consistency: 0.5          # max unsupervised loss weight
+consistency_rampup: 80    # sigmoid ramp-up epochs (in units of iter//150)
+conf_threshold: 0.3       # pseudo-label confidence threshold
+conf_threshold_min: 0.15  # starting threshold during warmup
+conf_threshold_warmup: 2000  # iterations to ramp from min to target
+
+# 5. AD-MT: RPA (Random Periodic Alternate) module
+#    Paper Sec 3.2: Random-period alternate EMA updating for teacher diversity
+alt_flag_epoch_shuffle_teachers: False       # reset teacher order each epoch
+alt_flag_updating_period_random: True        # random period (paper: better than fixed)
+alt_param_updating_period_iters: 50          # max half-period iterations
+
+# 6. AD-MT: CCM (Conflict-Combating Module)
+#    Paper Sec 3.3: Conflict-Combating between two teachers + student arbitration
+#    Modes: "pixel_confidence" (Eq.8-9), "random", "always_tea", "always_stu"
+alt_flag_conflict_mode: "pixel_confidence"   # how to resolve teacher-teacher & teacher-student conflicts
+alt_param_conflict_weight: 1.0               # weight for conflict loss (>0 enables CCM, paper default 1.0)
+alt_flag_conflict_stu_use_more: False        # True: student can override beyond teacher-conflict region
+alt_param_ensemble_temp: 1.0                 # temperature for entropy-weighted ensemble (Eq.8)
+alt_flag_entropy_weighted_fusion: True       # True: use entropy-weighted box fusion (Eq.8); False: argmax conf
+
+# 7. Self-learning mode (late-stage single-teacher, origin infrastructure)
+#    flag_pseudo_from_student: student generates own pseudo labels (no 2-teacher)
+#    self_learning_start_iter: iteration to switch to self-learning (-1 = disabled)
+#    alt_param_threshold_self_training: conf threshold during self-learning phase
+flag_pseudo_from_student: False
+self_learning_start_iter: -1              # -1 = disabled; set to e.g. 40000 for late-stage
+alt_param_threshold_self_training: 0.5    # higher threshold for self-learning pseudo labels
+
+# 8. Augmentation
+#    CutMix applied on non-active teacher's turn (RPA diversity)
+cutmix_prob: 1.0          # probability of CutMix on alternate teacher's turn

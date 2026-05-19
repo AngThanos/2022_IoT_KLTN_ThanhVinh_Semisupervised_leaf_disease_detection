@@ -1,0 +1,46 @@
+# ═══════════════════════════════════════════════════════════
+#  Ablation C: 2 teachers + RPA + CCM teacher-only (no student arbitration)
+#  Conflict resolved by teacher confidence only, student not involved
+#  Expected: between ablation_no_ccm and full AD-MT
+# ═══════════════════════════════════════════════════════════
+
+root_path: "/home/jupyter-iec2021iot13/Vinh/iMAS_Remake/data/banana_data"
+dataset_yaml: "/home/jupyter-iec2021iot13/Vinh/iMAS_Remake/data/banana_data/meta/dataset_supervised.yaml"
+res_path: "./results/banana"
+exp: "ablation_ccm_tea_only"
+model: "/home/jupyter-iec2021iot13/Vinh/iMAS_Remake/models/YOLOv11-SA-Custom-400/best.pt"
+
+img_size: 640
+batch_size_lb: 4
+batch_size_ulb: 4
+num_workers: 4
+num_strong_augs: 2
+
+seed: 2023
+deterministic: False
+max_iterations: 10000
+base_lr: 0.01
+poly: True
+use_amp: True
+test_interval_ep: 2
+
+ema_decay: 0.999
+consistency: 0.5
+consistency_rampup: 80
+conf_threshold: 0.3
+conf_threshold_min: 0.15
+conf_threshold_warmup: 2000
+
+# RPA: enabled
+alt_flag_epoch_shuffle_teachers: False
+alt_flag_updating_period_random: True
+alt_param_updating_period_iters: 50
+
+# CCM: enabled but teacher-only resolution (always_tea = no student arbitration)
+alt_flag_conflict_mode: "always_tea"          # <<< teacher only, no student
+alt_param_conflict_weight: 1.0
+alt_flag_conflict_stu_use_more: False
+alt_param_ensemble_temp: 1.0
+alt_flag_entropy_weighted_fusion: True
+
+cutmix_prob: 1.0

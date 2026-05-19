@@ -1,0 +1,27 @@
+Log file: /home/jupyter-iec2021iot13/Vinh/AD-MT_Remake/logs/val_all_27_20260518_092012.txt
+Start: Mon May 18 09:20:12 AM UTC 2026
+
+
+==========================================
+[1] conf_001/bce/yolov11
+      ckpt: /home/jupyter-iec2021iot13/Vinh/AD-MT_Remake/exps/conf_001/bce/yolov11/best_tea_model.pt
+==========================================
+/opt/tljh/user/lib/python3.12/site-packages/torch/cuda/__init__.py:182: UserWarning: CUDA initialization: CUDA unknown error - this may be due to an incorrectly set up environment, e.g. changing env variable CUDA_VISIBLE_DEVICES after program start. Setting the available devices to be zero. (Triggered internally at /pytorch/c10/cuda/CUDAFunctions.cpp:109.)
+  return torch._C._cuda_getDeviceCount() > 0
+Ultralytics 8.3.224 🚀 Python-3.12.6 torch-2.8.0+cu129 CPU (13th Gen Intel Core(TM) i5-13400F)
+YOLO11 summary (fused): 100 layers, 2,582,542 parameters, 0 gradients, 6.3 GFLOPs
+[34m[1mval: [0mFast image access ✅ (ping: 0.0±0.0 ms, read: 322.9±99.9 MB/s, size: 234.1 KB)
+[K[34m[1mval: [0mScanning /home/jupyter-iec2021iot13/YOLO_Leaf_Disease/banana_dataset/Banana_Dataset_ValTest_2025/test_each1/labels.cache... 181 images, 0 backgrounds, 0 corrupt: 100% ━━━━━━━━━━━━ 181/181 63.3Mit/s 0.0s[K[34m[1mval: [0mScanning /home/jupyter-iec2021iot13/YOLO_Leaf_Disease/banana_dataset/Banana_Dataset_ValTest_2025/test_each1/labels.cache... 181 images, 0 backgrounds, 0 corrupt: 100% ━━━━━━━━━━━━ 181/181 7.4Mit/s 0.0s
+[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 8% ━─────────── 1/12 0.1it/s 2.3s<1:25[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 17% ━━────────── 2/12 0.2it/s 5.9s<57.0s[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 25% ━━━───────── 3/12 0.2it/s 10.8s<49.1s[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 33% ━━━━──────── 4/12 0.2it/s 15.4s<41.2s[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 42% ━━━━━─────── 5/12 0.3it/s 17.6s<26.1s[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 50% ━━━━━━────── 6/12 0.3it/s 19.9s<18.7s[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 58% ━━━━━━━───── 7/12 0.4it/s 22.1s<13.9s[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 67% ━━━━━━━━──── 8/12 0.4it/s 24.4s<10.4s[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 75% ━━━━━━━━━─── 9/12 0.4it/s 26.6s<7.5s[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 83% ━━━━━━━━━━── 10/12 0.4it/s 28.9s<4.8s[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 92% ━━━━━━━━━━━─ 11/12 0.4it/s 31.1s<2.4s[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 100% ━━━━━━━━━━━━ 12/12 0.4it/s 31.8s[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 100% ━━━━━━━━━━━━ 12/12 0.4it/s 31.8s
+                   all        181      15052      0.594      0.517       0.54       0.24
+        early_sigatoka        181       7389      0.484      0.476      0.442      0.162
+         late_sigatoka        181       7663      0.703      0.559      0.638      0.319
+Speed: 4.1ms preprocess, 155.1ms inference, 0.0ms loss, 0.7ms postprocess per image
+Results saved to [1m/home/jupyter-iec2021iot13/Vinh/AD-MT_Remake/exps/conf_001/bce/yolov11/val/test[0m
+💡 Learn more at https://docs.ultralytics.com/modes/val
+  >> mAP50=0.54  mAP50-95=0.24  P=0.594  R=0.517
+
+==========================================
+[2] conf_001/bce/yolov11-sa
+      ckpt: /home/jupyter-iec2021iot13/Vinh/AD-MT_Remake/exps/conf_001/bce/yolov11-sa/best_tea_model.pt
+==========================================

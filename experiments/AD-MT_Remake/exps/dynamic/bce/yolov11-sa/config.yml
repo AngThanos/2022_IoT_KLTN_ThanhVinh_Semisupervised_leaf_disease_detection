@@ -1,0 +1,57 @@
+# ═══════════════════════════════════════════════════════════
+#  AD-MT YOLO sweep config — auto-generated
+#  Conf: dynamic | Loss: bce | Model: yolov11-sa
+# ═══════════════════════════════════════════════════════════
+
+# 1. Paths
+root_path: "/home/jupyter-iec2021iot13/Vinh/iMAS_Remake/data/banana_data"
+dataset_yaml: "/home/jupyter-iec2021iot13/Vinh/iMAS_Remake/data/banana_data/meta/dataset_supervised.yaml"
+res_path: "./exps"
+exp: "dynamic/bce"
+model: "/home/jupyter-iec2021iot13/Vinh/AD-MT_Remake/models/YOLOv11-SA-Origin-400/best.pt"
+model_tag: "yolov11-sa"
+loss_type: "bce"   # NOTE: user manually changes YOLO loss before each run
+
+# 2. Data
+img_size: 1024
+batch_size_lb: 4
+batch_size_ulb: 4
+num_workers: 4
+num_strong_augs: 2
+
+# 3. Training
+seed: 2023
+deterministic: False
+max_iterations: 30000
+base_lr: 0.01
+poly: True
+use_amp: True
+test_interval_ep: 2
+
+# 4. Semi-supervised / EMA
+ema_decay: 0.999
+consistency: 0.5
+consistency_rampup: 80
+conf_threshold: 0.3
+conf_threshold_min: 0.15
+conf_threshold_warmup: 2000
+
+# 5. AD-MT RPA
+alt_flag_epoch_shuffle_teachers: False
+alt_flag_updating_period_random: True
+alt_param_updating_period_iters: 50
+
+# 6. AD-MT CCM
+alt_flag_conflict_mode: "pixel_confidence"
+alt_param_conflict_weight: 1.0
+alt_flag_conflict_stu_use_more: False
+alt_param_ensemble_temp: 1.0
+alt_flag_entropy_weighted_fusion: True
+
+# 7. Self-learning (disabled)
+flag_pseudo_from_student: False
+self_learning_start_iter: -1
+alt_param_threshold_self_training: 0.5
+
+# 8. Augmentation
+cutmix_prob: 1.0
