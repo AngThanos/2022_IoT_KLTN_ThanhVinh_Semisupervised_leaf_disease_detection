@@ -1,66 +1,55 @@
 # AD-MT_Remake — AD-MT cho YOLO Detection
 
-
-Bản remake của AD-MT (Alternate Diverse Teaching) áp dụng cho semi-supervised YOLO object detection trên dataset banana, mượn data pipeline kiểu iMAS.
-
 **Tham khảo:**
-- AD-MT (paper): *Alternate Diverse Teaching for Semi-supervised Medical Image Segmentation* — <https://arxiv.org/abs/2311.17325>
-- AD-MT (code gốc): <https://github.com/zhenzhao/AD-MT>
-- iMAS (paper): *Instance-specific and Model-adaptive Supervision for Semi-supervised Semantic Segmentation* — <https://arxiv.org/abs/2211.11335>
-- iMAS (code gốc, dùng cho data pipeline): <https://github.com/zhenzhao/iMAS>
+- AD-MT (ECCV 2024) — code gốc: <https://github.com/ZhenZHAO/AD-MT>
+- Paper: *Alternate Diverse Teaching for Semi-supervised Medical Image Segmentation* — <https://arxiv.org/abs/2311.17325>
+- iMAS (data pipeline tham khảo) — <https://github.com/ZhenZHAO/iMAS>
 
-## 1. Tổng quan
-
-Pipeline gồm hai thành phần chính từ AD-MT:
-- **RPA (Random Periodic Alternate Updating):** một student, hai teacher non-trainable; teacher được EMA-update **luân phiên** theo chu kỳ ngẫu nhiên để giữ tính đa dạng.
-- **CCM (Conflict-Combating Module):** kết hợp pseudo-label từ hai teacher bằng entropy-weighted ensembling, xử lý vùng hai teacher mâu thuẫn dựa trên độ tự tin của student.
-
-Mã nguồn chính nằm trong [code/train_yolo_admt.py](code/train_yolo_admt.py); module RPA + CCM ở [code/train_utils.py](code/train_utils.py); data loader ở [code/dataloaders/yolo_loader.py](code/dataloaders/yolo_loader.py).
-
-## 2. Huấn luyện
-
-### 2.1. Lệnh chạy
-
-Script `run_yolo_admt.sh` nhận `GPU_ID` và `CONFIG`:
+## 1. Huấn luyện
 
 ```bash
-bash run_yolo_admt.sh 0 config_yolo_admt.yml
+cd AD-MT_Remake
 ```
 
-Chạy toàn bộ ablation tuần tự:
+### 1.1. Train bán giám sát (RPA + CCM trên YOLO)
+
+Script `run_yolo_admt.sh` nhận tham số `GPU_ID CONFIG`:
 
 ```bash
-bash run_ablation.sh 0
+bash run_yolo_admt.sh 0 exps/conf_025/varifocal_custom/yolov11-sa/config.yml
 ```
 
-### 2.2. Trước khi chạy — cấu hình cần sửa
+Hoặc chạy trực tiếp:
 
-Mở `cfgs/config_yolo_admt.yml` (hoặc file ablation trong `cfgs/ablation/`) và sửa:
-1. `root_path` → folder chứa `banana_data`.
-2. `dataset_yaml` → file YAML mô tả dataset (theo format Ultralytics).
-3. `model` → đường dẫn `.pt` pretrained YOLO dùng để init student/teacher.
-4. `res_path`, `exp` → nơi lưu kết quả (`results/<exp>/<model_path_escaped>/`).
-5. `conf_threshold`, `consistency`, `ema_decay` → tham số semi-supervised.
-6. `alt_param_conflict_weight` → trọng số CCM (đặt `0` để tắt CCM, xem ablation).
-7. `alt_flag_updating_period_random`, `alt_param_updating_period_iters` → cấu hình RPA.
+```bash
+python code/train_yolo_admt.py --cfg exps/conf_025/varifocal_custom/yolov11-sa/config.yml --gpu_id 0
+```
 
-Ngoài ra cần sửa dòng `cd /home/jupyter-iec2021iot13/Vinh/AD-MT` trong [run_yolo_admt.sh](run_yolo_admt.sh) cho khớp đường dẫn repo thực tế (`AD-MT_Remake`).
+**Trước khi chạy — cấu hình cần sửa:**
 
-## 3. Đánh giá
+Mở file config tương ứng (ví dụ `exps/conf_025/varifocal_custom/yolov11-sa/config.yml`) và sửa:
+1. `root_path` và `dataset_yaml` → trỏ tới folder ảnh / file YAML mô tả dataset (định dạng Ultralytics).
+2. `model` → file `.pt` pretrained YOLO dùng để init student và 2 teacher.
+3. `conf_threshold` → ngưỡng pseudo-label (mặc định `0.01` cho conf_001, `0.25` cho conf_025, hoặc dynamic warmup `0.15 → 0.30`).
+4. `consistency`, `consistency_rampup`, `ema_decay` → tham số semi-supervised.
+5. `alt_param_conflict_weight` → trọng số CCM (đặt `0` để tắt CCM).
+6. `alt_param_updating_period_iters`, `alt_flag_updating_period_random` → cấu hình RPA.
 
-Trong thư mục `${res_path}/${exp}/<model_path_escaped>/` sẽ có:
-- `best_tea_model.pt` — teacher EMA tại epoch tốt nhất (theo `mAP50` của teacher), định dạng Ultralytics, dùng trực tiếp với `yolo val` / `YOLO('best_tea_model.pt')`.
-- `best_stu_model.pt` — student tại epoch tốt nhất (theo `mAP50` của student), cùng định dạng Ultralytics.
-- `log/` — TensorBoard logs và CSV (`train_*.csv`, `val_*.csv`).
+
+## 2. Đánh giá
+
+Sau khi train xong, trong thư mục snapshot của exp tương ứng (`exps/<conf>/<loss>/<model>/`) sẽ có:
+- `best_tea_model.pt` — teacher EMA tại epoch tốt nhất (theo `mAP50` của teacher), lưu theo định dạng Ultralytics, dùng trực tiếp với `yolo val` / `YOLO('best_tea_model.pt')`.
+- `best_stu_model.pt` — student tại epoch tốt nhất, cùng định dạng Ultralytics.
+- `last_ckpt.pt` — checkpoint nội bộ (chứa `model_state`, `optimizer_state`, `ema_state`, `ema_another_state`, `rpa_state`, ...), dùng để resume training, không nạp trực tiếp bằng `YOLO(...)` được.
 - `log.txt` — log chính của quá trình train.
-
-Đánh giá bằng `yolo val`:
+- `log/` — TensorBoard logs và CSV.
 
 ```bash
 yolo val \
     data=Banana_Disease_Dataset_Test.yaml \
-    model=results/banana/admt_yolo/<model_path_escaped>/best_tea_model.pt \
-    imgsz=640 \
+    model=exps/conf_025/varifocal_custom/yolov11-sa/best_tea_model.pt \
+    imgsz=1024 \
     conf=0.1 \
     iou=0.1 \
     agnostic_nms=True \
@@ -68,25 +57,93 @@ yolo val \
 ```
 
 **Sửa đường dẫn theo model:**
-- `data=...`: dataset yaml chứa đường dẫn tập test.
-- `model=...`: file `.pt` checkpoint cần đánh giá (`best_tea_model.pt` hoặc `best_stu_model.pt`).
+- `data=...`: dataset yaml (chứa đường dẫn tập test).
+- `model=...`: đường dẫn file `.pt` checkpoint cần đánh giá.
 - `imgsz`, `conf`, `iou`, ... → điều chỉnh tham số đánh giá nếu cần.
 
-## 4. Ablation
+## 3. Kết quả
 
-Các config trong `cfgs/ablation/`:
-- `ablation_1teacher.yml` — chỉ 1 teacher (tắt RPA + CCM).
-- `ablation_no_ccm.yml` — bật RPA, tắt CCM (`alt_param_conflict_weight: 0`).
-- `ablation_ccm_tea_only.yml` — CCM chỉ giữa hai teacher, không dùng student arbitration.
-- `ablation_fixed_period.yml` — RPA dùng chu kỳ cố định thay vì ngẫu nhiên.
+Validation trên tập test (181 ảnh, 15052 instances, 2 classes). Giá trị **in đậm** = tăng so với baseline YOLOv11 cùng nhóm (cùng ngưỡng tin cậy + cùng loss).
 
-## 5. Citation
-
-```bibtex
-@article{zhao2023alternate,
-  title={Alternate Diverse Teaching for Semi-supervised Medical Image Segmentation},
-  author={Zhao, Zhen and Wang, Zicheng and Wang, Longyue and Yuan, Yixuan and Zhou, Luping},
-  journal={arXiv preprint arXiv:2311.17325},
-  year={2023}
-}
-```
+<table>
+<thead>
+<tr>
+<th>Ngưỡng tin cậy</th>
+<th>Trọng số mất mát</th>
+<th>Mô hình</th>
+<th>Độ chính xác</th>
+<th>Độ nhạy</th>
+<th>mAP0.5</th>
+<th>mAP0.5:0.95</th>
+<th>F1-score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td rowspan="9">1%</td>
+<td rowspan="3">BCE</td>
+<td>YOLOv11</td>
+<td>59.4</td><td>51.7</td><td>54.0</td><td>24.0</td><td>55.3</td>
+</tr>
+<tr><td>YOLOv11-SA</td><td>57.3</td><td>50.7</td><td>50.7</td><td>22.3</td><td>53.8</td></tr>
+<tr><td>YOLOv11-SA custom</td><td>58.3</td><td>51.2</td><td>52.9</td><td>23.6</td><td>54.5</td></tr>
+<tr>
+<td rowspan="3">Varifocal</td>
+<td>YOLOv11</td>
+<td>58.5</td><td>51.5</td><td>52.1</td><td>23.1</td><td>54.8</td>
+</tr>
+<tr><td>YOLOv11-SA</td><td>56.7</td><td>51.1</td><td>50.3</td><td>22.2</td><td>53.8</td></tr>
+<tr><td>YOLOv11-SA custom</td><td>58.3</td><td>51.3</td><td><b>52.3</b></td><td><b>23.4</b></td><td>54.6</td></tr>
+<tr>
+<td rowspan="3">Varifocal Custom</td>
+<td>YOLOv11</td>
+<td>59.5</td><td>51.8</td><td>54.2</td><td>24.5</td><td>55.4</td>
+</tr>
+<tr><td>YOLOv11-SA</td><td>58.0</td><td>51.0</td><td>52.2</td><td>23.3</td><td>54.3</td></tr>
+<tr><td>YOLOv11-SA custom</td><td>58.9</td><td>51.3</td><td>53.4</td><td>23.8</td><td>54.8</td></tr>
+<tr>
+<td rowspan="9">25%</td>
+<td rowspan="3">BCE</td>
+<td>YOLOv11</td>
+<td>61.8</td><td>45.9</td><td>51.9</td><td>24.0</td><td>52.7</td>
+</tr>
+<tr><td>YOLOv11-SA</td><td>55.5</td><td><b>49.7</b></td><td>50.0</td><td>22.3</td><td>52.4</td></tr>
+<tr><td>YOLOv11-SA custom</td><td>55.5</td><td><b>50.3</b></td><td>51.1</td><td>22.9</td><td><b>52.8</b></td></tr>
+<tr>
+<td rowspan="3">Varifocal</td>
+<td>YOLOv11</td>
+<td>56.7</td><td>50.7</td><td>52.5</td><td>23.7</td><td>53.5</td>
+</tr>
+<tr><td>YOLOv11-SA</td><td>55.3</td><td>49.2</td><td>49.3</td><td>22.0</td><td>52.1</td></tr>
+<tr><td>YOLOv11-SA custom</td><td><b>58.5</b></td><td>48.4</td><td>50.6</td><td>23.3</td><td>53.0</td></tr>
+<tr>
+<td rowspan="3">Varifocal Custom</td>
+<td>YOLOv11</td>
+<td>62.4</td><td>47.5</td><td>53.4</td><td>24.7</td><td>53.9</td>
+</tr>
+<tr><td>YOLOv11-SA</td><td><b>64.0</b></td><td>44.8</td><td>52.7</td><td><b>25.1</b></td><td>52.7</td></tr>
+<tr><td>YOLOv11-SA custom</td><td>55.7</td><td><b>50.7</b></td><td>50.7</td><td>23.2</td><td>53.1</td></tr>
+<tr>
+<td rowspan="9">dynamic</td>
+<td rowspan="3">BCE</td>
+<td>YOLOv11</td>
+<td>56.8</td><td>48.4</td><td>51.3</td><td>23.6</td><td>52.3</td>
+</tr>
+<tr><td>YOLOv11-SA</td><td><b>60.7</b></td><td>44.7</td><td>50.3</td><td>23.0</td><td>51.5</td></tr>
+<tr><td>YOLOv11-SA custom</td><td><b>57.7</b></td><td>45.7</td><td>48.9</td><td>22.3</td><td>51.0</td></tr>
+<tr>
+<td rowspan="3">Varifocal</td>
+<td>YOLOv11</td>
+<td>60.4</td><td>46.7</td><td>52.1</td><td>24.6</td><td>52.7</td>
+</tr>
+<tr><td>YOLOv11-SA</td><td><b>66.4</b></td><td>42.0</td><td><b>52.8</b></td><td><b>25.6</b></td><td>51.5</td></tr>
+<tr><td>YOLOv11-SA custom</td><td>56.7</td><td>46.2</td><td>48.5</td><td>22.3</td><td>50.9</td></tr>
+<tr>
+<td rowspan="3">Varifocal Custom</td>
+<td>YOLOv11</td>
+<td>57.3</td><td>47.2</td><td>49.7</td><td>22.8</td><td>51.8</td>
+</tr>
+<tr><td>YOLOv11-SA</td><td><b>58.9</b></td><td>47.1</td><td><b>50.4</b></td><td><b>23.2</b></td><td><b>52.3</b></td></tr>
+<tr><td>YOLOv11-SA custom</td><td><b>61.2</b></td><td><b>47.4</b></td><td><b>52.7</b></td><td><b>24.5</b></td><td><b>53.4</b></td></tr>
+</tbody>
+</table>
