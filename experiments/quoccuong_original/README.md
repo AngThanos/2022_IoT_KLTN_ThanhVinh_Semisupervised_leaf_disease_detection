@@ -33,30 +33,9 @@ Từ thư mục `experiments/quoccuong_original`, chạy:
 ### Đánh giá tập 2024 (đã gán nhãn)
 
 ```bash
-# YOLOv11-Base
 yolo val \
 	data=configs/Banana_Disease_Dataset_Test.yaml \
-	model=YOLOv11-All-Scheme-Flinta/YOLOv11-Base-400/weights/best.pt \
-	imgsz=1024 \
-	exist_ok=True \
-	conf=0.1 \
-	iou=0.1 \
-	agnostic_nms=True
-
-# YOLOv11-SA-Origin
-yolo val \
-	data=configs/Banana_Disease_Dataset_Test.yaml \
-	model=YOLOv11-All-Scheme-Flinta/YOLOv11-SA-Origin-400/weights/best.pt \
-	imgsz=1024 \
-	exist_ok=True \
-	conf=0.1 \
-	iou=0.1 \
-	agnostic_nms=True
-
-# YOLOv11-SA-Custom
-yolo val \
-	data=configs/Banana_Disease_Dataset_Test.yaml \
-	model=YOLOv11-All-Scheme-Flinta/YOLOv11-SA-Custom-400/weights/best.pt \
+	model=<đường_dẫn_tới_weights/best.pt> \
 	imgsz=1024 \
 	exist_ok=True \
 	conf=0.1 \
@@ -118,20 +97,7 @@ yolo val \
 # - Comment lại dòng 2024:
 #   val: banana_dataset/Banana_Dataset_2024_TrainValTest/test/
 
-# Chạy val tương tự ở trên và thay từng model vào hoặc chạy nhanh như này:
-for prefix in YOLOv11-Base-400 YOLOv11-SA-Origin-400 YOLOv11-SA-Custom-400
-do
-	for ckpt in \
-		YOLOv11-All-Scheme-Flinta/${prefix}/weights/best.pt \
-		YOLOv11-All-Scheme-Flinta/${prefix}-Iter*/weights/best.pt \
-		YOLOv11-All-Scheme-Flinta/${prefix}-Conf001-Iter*/weights/best.pt
-	do
-		[ -f "$ckpt" ] || continue
-		run_name=$(basename "$(dirname "$(dirname "$ckpt")")")
-		yolo val data=configs/Banana_Disease_Dataset_Test.yaml model="$ckpt" imgsz=1024 exist_ok=True conf=0.1 iou=0.1 agnostic_nms=True project="YOLOv11-Val-2025-${prefix}" name="$run_name"
-	done
-done
-
+# Chạy val tương tự ở trên và thay từng model vào 
 ```
 
 Sau khi val ra kết quả, tự chọn run có mAP50-95 cao nhất
