@@ -322,4 +322,97 @@ Sau khi val ra kết quả, tự chọn run có mAP50-95 cao nhất
 	</tbody>
 </table>
 
+### Bộ dữ liệu 2025 (chưa gán nhãn) - Ngưỡng tin cậy dynamic (25% → 20%)
+
+<table>
+	<thead>
+		<tr>
+			<th>Trọng số mất mát</th>
+			<th>Mô hình</th>
+			<th>Độ chính xác</th>
+			<th>Độ nhạy</th>
+			<th>mAP0.5</th>
+			<th>mAP0.5:0.95</th>
+			<th>F1-score</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td rowspan="3">BCE</td>
+			<td>YOLOv11</td>
+			<td>73.1</td>
+			<td>13.9</td>
+			<td>42.5</td>
+			<td>21.3</td>
+			<td>23.4</td>
+		</tr>
+		<tr>
+			<td>YOLOv11-SA</td>
+			<td>74.4</td>
+			<td>11.7</td>
+			<td>42.3</td>
+			<td>22.2</td>
+			<td>20.2</td>
+		</tr>
+		<tr>
+			<td>YOLOv11-SA custom</td>
+			<td>53.5</td>
+			<td>43.2</td>
+			<td>44.7</td>
+			<td>19.8</td>
+			<td>47.8</td>
+		</tr>
+		<tr>
+			<td rowspan="3">Varifocal</td>
+			<td>YOLOv11</td>
+			<td>51.3</td>
+			<td>43.4</td>
+			<td>43.8</td>
+			<td>19.8</td>
+			<td>47.0</td>
+		</tr>
+		<tr>
+			<td>YOLOv11-SA</td>
+			<td>56.6</td>
+			<td>25.4</td>
+			<td>39.2</td>
+			<td>18.0</td>
+			<td>35.1</td>
+		</tr>
+		<tr>
+			<td>YOLOv11-SA custom</td>
+			<td>55.0</td>
+			<td>42.9</td>
+			<td>45.8</td>
+			<td>20.8</td>
+			<td>48.2</td>
+		</tr>
+		<tr>
+			<td rowspan="3">Varifocal Custom</td>
+			<td>YOLOv11</td>
+			<td>51.7</td>
+			<td>41.5</td>
+			<td>42.5</td>
+			<td>18.5</td>
+			<td>46.0</td>
+		</tr>
+		<tr>
+			<td>YOLOv11-SA</td>
+			<td>49.5</td>
+			<td>44.4</td>
+			<td>42.1</td>
+			<td>18.5</td>
+			<td>46.8</td>
+		</tr>
+		<tr>
+			<td>YOLOv11-SA custom</td>
+			<td>52.6</td>
+			<td>42.7</td>
+			<td>44.5</td>
+			<td>19.7</td>
+			<td>47.2</td>
+		</tr>
+	</tbody>
+</table>
+
 
