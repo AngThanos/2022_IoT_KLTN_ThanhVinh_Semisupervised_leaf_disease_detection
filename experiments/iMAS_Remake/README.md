@@ -80,8 +80,6 @@ yolo val \
     exist_ok=True
 ```
 
-Hoặc dùng `python eval_yolo.py --config ./exps/yolo_det/config_sup.yaml --weights ./release/SA-Origin/varifocal_custom/dynamic_conf/online/best.pt` để xuất report. Sửa `data` và `model` theo đường dẫn của bạn.
-
 ## 4. Kết quả
 
 Đánh giá trên bộ dữ liệu **2025 (chưa gán nhãn)** với 3 cấu hình ngưỡng tin cậy pseudo-label: `1%`, `25%`, và `dynamic`.
