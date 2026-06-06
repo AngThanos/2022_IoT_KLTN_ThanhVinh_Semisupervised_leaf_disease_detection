@@ -26,21 +26,13 @@ Script `run.sh` nhận tham số `CONFIG GPUS PORT SEED`:
 bash run.sh ../exps/conf_025/varifocal_custom/yolov11-sa-custom/config_semi.yaml 1 29500 42
 ```
 
-**Trước khi chạy — cấu hình cần sửa:**
-
-Mở file config tương ứng (ví dụ `../exps/conf_025/varifocal_custom/yolov11-sa-custom/config_semi.yaml`) và sửa:
-1. `dataset.train.data_root` và `dataset.train.data_list` → trỏ tới folder ảnh có nhãn / unlabeled.
-2. `dataset.val.data_root` và `dataset.val.data_list` → trỏ tới tập đánh giá.
-3. `trainer.unsupervised.threshold` (mặc định `0.25`) → điều chỉnh ngưỡng pseudo-label nếu cần.
-4. `net.encoder.pretrain` → trỏ tới file `.pt` pretrained tương ứng trong `models/`.
+**Trước khi chạy:** Sửa đường dẫn dataset và pretrain trong file config tương ứng.
 
 ## 2. Đánh giá
 
-Sau khi train xong, trong thư mục snapshot của exp tương ứng (`saver.snapshot_dir` trong config, ví dụ `checkpoint/` hoặc `checkpoints/`) sẽ có:
-- `best.pt` — teacher EMA tại epoch tốt nhất, lưu theo định dạng Ultralytics, dùng trực tiếp với `yolo val` / `YOLO('best.pt')`.
-- `best_student.pt` — student tại epoch tốt nhất, cùng định dạng Ultralytics.
-- `last.pt` — teacher EMA tại epoch cuối, định dạng Ultralytics.
-- `ckpt_best.pt`, `ckpt.pt` — checkpoint nội bộ của vòng train (chứa `model_state`, `optimizer_state`, `teacher_state`, `epoch`, ...), dùng để resume training, không nạp trực tiếp bằng `YOLO(...)` được.
+Sau khi train xong, thư mục snapshot (theo `saver.snapshot_dir` trong config) chứa:
+- `best.pt`, `best_student.pt`, `last.pt` — định dạng Ultralytics, dùng trực tiếp với `yolo val`.
+- `ckpt_best.pt`, `ckpt.pt` — checkpoint nội bộ, dùng để resume training.
 
 ### 2.1. Đánh giá bằng `yolo val`
 
