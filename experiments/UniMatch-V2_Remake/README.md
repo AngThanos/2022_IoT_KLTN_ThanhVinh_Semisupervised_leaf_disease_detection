@@ -15,12 +15,10 @@ Bản remake của **UniMatch V2** áp dụng cho semi-supervised YOLO object de
 
 ## 1. Tổng quan
 
-Pipeline FixMatch-style với 1 student + 1 teacher EMA, mở rộng theo các đóng góp chính của UniMatch V2 áp dụng cho detection:
-1. **Dual-stream weak↔strong consistency** — mỗi ảnh unlabeled sinh 2 strong view (s1, s2); pseudo-label lấy từ teacher EMA trên weak view, áp dụng cho cả s1 và s2.
-2. **Complementary Channel-wise Dropout (CCD)** — áp dropout kênh bù trừ tại 3 vị trí save indices của backbone YOLO (P3/P4/P5), buộc 2 stream học từ 2 view feature khác nhau.
-3. **CutMix giữa các ảnh unlabeled** — pair theo `batch.flip(0)`, kích hoạt độc lập cho s1 và s2.
-4. **EMA teacher cập nhật online** — γ = min(1 − 1/(t+1), 0.996), validate trực tiếp trên teacher (Section 4.2 của paper).
-5. **Loss tổng** L = (L_x + L_u) / 2, trong đó L_u = (L_u_s1 + L_u_s2) / 2.
+FixMatch-style semi-supervised detection với 1 student + 1 teacher EMA:
+- **Dual-stream consistency** (s1, s2) + Complementary Channel-wise Dropout — buộc 2 stream học từ feature views khác nhau
+- **CutMix** giữa các ảnh unlabeled, kích hoạt độc lập cho s1/s2
+- **Online EMA teacher** (γ = min(1 − 1/(t+1), 0.996)) + Loss L = (L_x + L_u) / 2
 
 ## 2. Huấn luyện
 
@@ -33,10 +31,9 @@ python unimatch_v2_yolo.py --config exps/conf_001/varifocal/yolov11-sa/config_se
 ### 2.2. Trước khi chạy — cấu hình cần sửa
 
 Mở `exps/<conf>/<loss>/<model>/config_semi.yaml` và sửa các đường dẫn:
-1. `data.root` → folder chứa `banana_data`.
-2. `data.labeled_images` / `labeled_labels` / `unlabeled_images` / `val_images` / `val_labels` → đường dẫn tương đối tới `data.root`.
-3. `student.init_pt`, `teacher.pt` → file `.pt` pretrained YOLO.
-4. `project.output_root` → nơi lưu checkpoint và log.
+1. `data.*` paths (root, labeled_images, unlabeled_images, val_images, val_labels) → đối với `banana_data`.
+2. `student.init_pt`, `teacher.pt` → file `.pt` pretrained YOLO.
+3. `project.output_root` → nơi lưu checkpoint và log.
 
 ## 3. Đánh giá
 
@@ -51,16 +48,11 @@ yolo val \
     exist_ok=True
 ```
 
-**Sửa đường dẫn theo model:**
-- `data=...`: dataset yaml chứa đường dẫn tập đánh giá.
-- `model=...`: file `.pt` checkpoint cần đánh giá.
-- `imgsz`, `conf`, `iou`, ... → điều chỉnh tham số đánh giá nếu cần.
+Sửa `data` (dataset yaml) và `model` (checkpoint `.pt`); điều chỉnh `imgsz`, `conf`, `iou` nếu cần.
 
 ## 4. Kết quả
 
 Validation trên tập test (181 ảnh, 15052 instances, 2 classes) với 3 cấu hình ngưỡng tin cậy pseudo-label: `1%`, `25%`, và `dynamic`.
-
-> Một số ô còn trống do sweep chưa hoàn tất hoặc model rơi vào mode collapse (output = 0). Sẽ cập nhật khi sweep BCE/`conf_025` chạy xong.
 
 <table>
 <thead>
@@ -80,67 +72,67 @@ Validation trên tập test (181 ảnh, 15052 instances, 2 classes) với 3 cấ
 <td rowspan="9">1%</td>
 <td rowspan="3">BCE</td>
 <td>YOLOv11</td>
-<td>—</td><td>—</td><td>~57–59</td><td>—</td><td>—</td>
+<td>0.57</td><td>0.51</td><td><b>0.499</b></td><td>0.214</td><td>0.538</td>
 </tr>
-<tr><td>YOLOv11-SA</td><td>—</td><td>—</td><td>~57–59</td><td>—</td><td>—</td></tr>
-<tr><td>YOLOv11-SA custom</td><td>—</td><td>—</td><td>~57–59</td><td>—</td><td>—</td></tr>
+<tr><td>YOLOv11-SA</td><td>0.533</td><td>0.508</td><td>0.449</td><td>0.192</td><td>0.520</td></tr>
+<tr><td>YOLOv11-SA custom</td><td>0.547</td><td>0.497</td><td>0.458</td><td>0.2</td><td>0.520</td></tr>
 <tr>
 <td rowspan="3">Varifocal</td>
 <td>YOLOv11</td>
-<td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+<td>0.494</td><td>0.483</td><td>0.455</td><td>0.199</td><td>0.488</td>
 </tr>
-<tr><td>YOLOv11-SA</td><td>—</td><td>—</td><td><b>45.11</b></td><td>—</td><td>—</td></tr>
-<tr><td>YOLOv11-SA custom</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td>YOLOv11-SA</td><td>0.521</td><td>0.487</td><td>0.456</td><td>0.197</td><td>0.503</td></tr>
+<tr><td>YOLOv11-SA custom</td><td>0.499</td><td>0.484</td><td>0.455</td><td>0.195</td><td>0.491</td></tr>
 <tr>
 <td rowspan="3">Varifocal Custom</td>
 <td>YOLOv11</td>
-<td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+<td>0.498</td><td>0.481</td><td>0.456</td><td>0.199</td><td>0.489</td>
 </tr>
-<tr><td>YOLOv11-SA</td><td>—</td><td>—</td><td><b>44.45</b></td><td>—</td><td>—</td></tr>
-<tr><td>YOLOv11-SA custom</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td>YOLOv11-SA</td><td>0.525</td><td>0.486</td><td>0.455</td><td>0.194</td><td>0.504</td></tr>
+<tr><td>YOLOv11-SA custom</td><td>0.507</td><td>0.486</td><td>0.453</td><td>0.195</td><td>0.496</td></tr>
 <tr>
 <td rowspan="9">25%</td>
 <td rowspan="3">BCE</td>
 <td>YOLOv11</td>
-<td>—</td><td>—</td><td>0.0 ⚠️ collapse</td><td>—</td><td>—</td>
+<td>0.537</td><td>0.511</td><td>0.472</td><td>0.206</td><td>0.524</td>
 </tr>
-<tr><td>YOLOv11-SA</td><td>—</td><td>—</td><td>60.17</td><td>—</td><td>—</td></tr>
-<tr><td>YOLOv11-SA custom</td><td>—</td><td>—</td><td>(đang chạy)</td><td>—</td><td>—</td></tr>
+<tr><td>YOLOv11-SA</td><td>0.566</td><td>0.521</td><td><b>0.491</b></td><td>0.21</td><td>0.543</td></tr>
+<tr><td>YOLOv11-SA custom</td><td>0.576</td><td>0.514</td><td><b>0.498</b></td><td>0.214</td><td>0.544</td></tr>
 <tr>
 <td rowspan="3">Varifocal</td>
 <td>YOLOv11</td>
-<td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+<td>0.437</td><td>0.46</td><td>0.393</td><td>0.179</td><td>0.448</td>
 </tr>
-<tr><td>YOLOv11-SA</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-<tr><td>YOLOv11-SA custom</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td>YOLOv11-SA</td><td>0.48</td><td>0.461</td><td>0.427</td><td>0.19</td><td>0.470</td></tr>
+<tr><td>YOLOv11-SA custom</td><td>0.415</td><td>0.482</td><td>0.41</td><td>0.178</td><td>0.446</td></tr>
 <tr>
 <td rowspan="3">Varifocal Custom</td>
 <td>YOLOv11</td>
-<td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+<td>0.44</td><td>0.457</td><td>0.392</td><td>0.18</td><td>0.448</td>
 </tr>
-<tr><td>YOLOv11-SA</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-<tr><td>YOLOv11-SA custom</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td>YOLOv11-SA</td><td>0.509</td><td>0.475</td><td>0.439</td><td>0.193</td><td>0.491</td></tr>
+<tr><td>YOLOv11-SA custom</td><td>0.435</td><td>0.499</td><td>0.442</td><td>0.193</td><td>0.465</td></tr>
 <tr>
 <td rowspan="9">dynamic</td>
 <td rowspan="3">BCE</td>
 <td>YOLOv11</td>
-<td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+<td>0.546</td><td>0.501</td><td>0.456</td><td>0.198</td><td>0.523</td>
 </tr>
-<tr><td>YOLOv11-SA</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-<tr><td>YOLOv11-SA custom</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td>YOLOv11-SA</td><td>0.545</td><td>0.485</td><td>0.453</td><td>0.197</td><td>0.513</td></tr>
+<tr><td>YOLOv11-SA custom</td><td>0.563</td><td>0.505</td><td><b>0.476</b></td><td>0.208</td><td>0.533</td></tr>
 <tr>
 <td rowspan="3">Varifocal</td>
 <td>YOLOv11</td>
-<td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+<td>0.495</td><td>0.488</td><td>0.449</td><td>0.195</td><td>0.491</td>
 </tr>
-<tr><td>YOLOv11-SA</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-<tr><td>YOLOv11-SA custom</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td>YOLOv11-SA</td><td>0.517</td><td>0.482</td><td>0.45</td><td>0.195</td><td>0.499</td></tr>
+<tr><td>YOLOv11-SA custom</td><td>0.452</td><td>0.493</td><td>0.443</td><td>0.195</td><td>0.472</td></tr>
 <tr>
 <td rowspan="3">Varifocal Custom</td>
 <td>YOLOv11</td>
-<td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+<td>0.501</td><td>0.482</td><td>0.45</td><td>0.195</td><td>0.491</td>
 </tr>
-<tr><td>YOLOv11-SA</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-<tr><td>YOLOv11-SA custom</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td>YOLOv11-SA</td><td>0.518</td><td>0.477</td><td>0.441</td><td>0.193</td><td>0.496</td></tr>
+<tr><td>YOLOv11-SA custom</td><td>0.449</td><td>0.499</td><td>0.447</td><td>0.197</td><td>0.473</td></tr>
 </tbody>
 </table>
