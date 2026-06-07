@@ -1,9 +1,10 @@
 # AD-MT_Remake — AD-MT cho YOLO Detection
 
+AD-MT_Remake áp dụng Alternate Diverse Teaching (AD-MT) cho YOLO detection trên dataset Banana.
+
 **Tham khảo:**
 - AD-MT (ECCV 2024) — code gốc: <https://github.com/ZhenZHAO/AD-MT>
 - Paper: *Alternate Diverse Teaching for Semi-supervised Medical Image Segmentation* — <https://arxiv.org/abs/2311.17325>
-- iMAS (data pipeline tham khảo) — <https://github.com/ZhenZHAO/iMAS>
 
 ![AD-MT diagram](docs/pipeline_admt.png)
 ## 1. Huấn luyện
@@ -20,31 +21,20 @@ Script `run_yolo_admt.sh` nhận tham số `GPU_ID CONFIG`:
 bash run_yolo_admt.sh 0 exps/conf_025/varifocal_custom/yolov11-sa/config.yml
 ```
 
-Hoặc chạy trực tiếp:
-
-```bash
-python code/train_yolo_admt.py --cfg exps/conf_025/varifocal_custom/yolov11-sa/config.yml --gpu_id 0
-```
-
 **Trước khi chạy — cấu hình cần sửa:**
 
 Mở file config tương ứng (ví dụ `exps/conf_025/varifocal_custom/yolov11-sa/config.yml`) và sửa:
-1. `root_path` và `dataset_yaml` → trỏ tới folder ảnh / file YAML mô tả dataset (định dạng Ultralytics).
-2. `model` → file `.pt` pretrained YOLO dùng để init student và 2 teacher.
-3. `conf_threshold` → ngưỡng pseudo-label (mặc định `0.01` cho conf_001, `0.25` cho conf_025, hoặc dynamic warmup `0.15 → 0.30`).
-4. `consistency`, `consistency_rampup`, `ema_decay` → tham số semi-supervised.
-5. `alt_param_conflict_weight` → trọng số CCM (đặt `0` để tắt CCM).
-6. `alt_param_updating_period_iters`, `alt_flag_updating_period_random` → cấu hình RPA.
-
+- `root_path`, `dataset_yaml`
+- `model`
+- `conf_threshold`, `consistency`, `ema_decay`, `alt_param_conflict_weight`
+- `alt_param_updating_period_iters`, `alt_flag_updating_period_random`
 
 ## 2. Đánh giá
 
 Sau khi train xong, trong thư mục snapshot của exp tương ứng (`exps/<conf>/<loss>/<model>/`) sẽ có:
-- `best_tea_model.pt` — teacher EMA tại epoch tốt nhất (theo `mAP50` của teacher), lưu theo định dạng Ultralytics, dùng trực tiếp với `yolo val` / `YOLO('best_tea_model.pt')`.
-- `best_stu_model.pt` — student tại epoch tốt nhất, cùng định dạng Ultralytics.
-- `last_ckpt.pt` — checkpoint nội bộ (chứa `model_state`, `optimizer_state`, `ema_state`, `ema_another_state`, `rpa_state`, ...), dùng để resume training, không nạp trực tiếp bằng `YOLO(...)` được.
-- `log.txt` — log chính của quá trình train.
-- `log/` — TensorBoard logs và CSV.
+- `best_tea_model.pt`, `best_stu_model.pt` — định dạng Ultralytics, dùng trực tiếp với `yolo val`.
+- `last_ckpt.pt` — checkpoint resume.
+- `log.txt`, `log/` — log và TensorBoard.
 
 ```bash
 yolo val \
@@ -57,10 +47,7 @@ yolo val \
     exist_ok=True
 ```
 
-**Sửa đường dẫn theo model:**
-- `data=...`: dataset yaml (chứa đường dẫn tập test).
-- `model=...`: đường dẫn file `.pt` checkpoint cần đánh giá.
-- `imgsz`, `conf`, `iou`, ... → điều chỉnh tham số đánh giá nếu cần.
+Chỉnh `data` và `model` theo đường dẫn của bạn.
 
 ## 3. Kết quả
 
