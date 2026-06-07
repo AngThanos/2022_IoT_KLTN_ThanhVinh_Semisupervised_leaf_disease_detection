@@ -1,0 +1,6 @@
+path: /home/jupyter-iec2021iot13/Vinh/iMAS_Remake/data/banana_data
+train: val/images
+val: val/images
+names:
+  0: early_sigatoka
+  1: late_sigatoka

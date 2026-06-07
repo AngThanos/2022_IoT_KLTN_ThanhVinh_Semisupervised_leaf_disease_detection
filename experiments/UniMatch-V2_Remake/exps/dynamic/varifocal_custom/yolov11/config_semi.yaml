@@ -1,0 +1,61 @@
+# UniMatch V2 for YOLO11 Semi-Supervised Object Detection
+# Sweep cell: conf=dynamic  loss=varifocal_custom  model=yolov11
+#
+# Reference paper: arXiv:2410.10777 (Yang et al., TPAMI)
+# See UniMatch-V2_Remake/README.md for YOLO-specific adaptations.
+
+project:
+  name: unimatch_v2_yolo_dynamic_varifocal_custom_yolov11
+  output_root: ./exps/dynamic/varifocal_custom/yolov11
+
+# Student and Teacher checkpoints (YOLOv11 baselines from iMAS_Remake)
+student:
+  init_pt: ../iMAS_Remake/models/YOLOv11-Base-400/best.pt
+
+teacher:
+  pt: ../iMAS_Remake/models/YOLOv11-Base-400/best.pt
+  # EMA decay: gamma = min(1 - 1/(iter+1), ema_decay). UniMatch V2 uses 0.996.
+  ema_decay: 0.996
+
+# Data configuration (uses iMAS_Remake data directory)
+data:
+  root: ../iMAS_Remake/data/banana_data
+  labeled_images: train/labeled/images
+  labeled_labels: train/labeled/labels
+  unlabeled_images: train/unlabeled/images
+  pseudo_labels: train/unlabeled/labels_pseudo
+  val_images: val/images
+  val_labels: val/labels
+  names:
+    0: early_sigatoka
+    1: late_sigatoka
+
+# Training hyperparameters (following UniMatch V2 Section 4.2)
+train:
+  imgsz: 1024
+  batch: 4
+  epochs: 50
+  device: 0
+  workers: 4
+  # Single LR group (YOLO11 fully pretrained on COCO).
+  lr: 0.0001
+  optimizer: sgd
+  momentum: 0.937
+  weight_decay: 0.0005
+
+# Pseudo-label confidence threshold tau (AugSeg-style linear schedule).
+# - Static : set only `conf_thresh`.
+# - Dynamic: set both `conf_thresh` (start) and `conf_thresh_end` (end).
+#            Linear interpolation from start to end across all epochs.
+conf_thresh: 0.15
+conf_thresh_end: 0.3
+
+# CutMix scale (fraction of image area to swap)
+cutmix_scale: 0.5
+
+# NMS parameters for teacher pseudo label generation
+iou_thres_nms: 0.6
+max_det: 300
+
+# Validation frequency (epochs)
+val_every: 5

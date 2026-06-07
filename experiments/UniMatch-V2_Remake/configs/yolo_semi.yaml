@@ -1,0 +1,66 @@
+# UniMatch V2 for YOLOv11 Semi-Supervised Object Detection
+# Based on: arXiv:2410.10777 (Yang et al., TPAMI)
+#
+# Key algorithm components:
+#   - EMA teacher for pseudo label generation
+#   - Dual-stream strong augmentation with complementary channel-wise Dropout
+#   - CutMix for detection (batch-flip pairing)
+#   - Confidence threshold filtering (τ)
+#
+# Data and model loaded from iMAS_Remake.
+
+project:
+  name: unimatch_v2_yolo
+  output_root: ./runs/unimatch_v2_yolo
+
+# Student and Teacher checkpoints (YOLOv11 from iMAS_Remake)
+student:
+  init_pt: ../iMAS_Remake/models/YOLOv11-SA-Origin-400/best.pt
+
+teacher:
+  pt: ../iMAS_Remake/models/YOLOv11-SA-Origin-400/best.pt
+  # EMA decay: γ = min(1 - 1/(iter+1), ema_decay)
+  # UniMatch V2 uses 0.996
+  ema_decay: 0.996
+
+# Data configuration (uses iMAS_Remake data directory)
+data:
+  root: ../iMAS_Remake/data/banana_data
+  labeled_images: train/labeled/images
+  labeled_labels: train/labeled/labels
+  unlabeled_images: train/unlabeled/images
+  pseudo_labels: train/unlabeled/labels_pseudo
+  val_images: val/images
+  val_labels: val/labels
+  names:
+    0: early_sigatoka
+    1: late_sigatoka
+
+# Training hyperparameters (following UniMatch V2 Section 4.2)
+train:
+  imgsz: 1024
+  batch: 4
+  epochs: 50
+  device: 0
+  workers: 4
+  # Single LR group for all parameters.
+  # UniMatch V2 Origin (DINOv2 ViT + DPT) splits backbone/decoder with
+  # lr_multi=40 because the decoder is randomly initialized. YOLO11 is fully
+  # pretrained on COCO (backbone + neck + head), so a single LR is the
+  # standard detection fine-tuning convention.
+  lr: 0.0001
+
+# Confidence threshold for pseudo label filtering
+# UniMatch V2 uses τ=0.95 for segmentation
+# For detection, use a lower threshold since detection confidence is different
+conf_thresh: 0.25
+
+# CutMix scale (fraction of image area to swap)
+cutmix_scale: 0.5
+
+# NMS parameters for teacher pseudo label generation
+iou_thres_nms: 0.6
+max_det: 300
+
+# Validation frequency
+val_every: 5

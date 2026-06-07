@@ -1,0 +1,9 @@
+logs
+*.pt
+*.pth
+runs
+splits
+training-logs
+*.log
+eval_tmp
+*.out

@@ -5,6 +5,7 @@
 - Paper: *Alternate Diverse Teaching for Semi-supervised Medical Image Segmentation* — <https://arxiv.org/abs/2311.17325>
 - iMAS (data pipeline tham khảo) — <https://github.com/ZhenZHAO/iMAS>
 
+![AD-MT diagram](docs/pipeline_admt.png)
 ## 1. Huấn luyện
 
 ```bash
