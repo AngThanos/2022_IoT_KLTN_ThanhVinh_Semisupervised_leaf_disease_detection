@@ -1,8 +1,0 @@
-{
-  "config": "/home/jupyter-iec2021iot13/Vinh/UniMatch-V2_Remake/exps/conf_001/varifocal_custom/yolov11-sa/config_semi.yaml",
-  "student_pt": "../iMAS_Remake/models/YOLOv11-SA-Origin-400/best.pt",
-  "teacher_pt": "../iMAS_Remake/models/YOLOv11-SA-Origin-400/best.pt",
-  "epochs": 50,
-  "best_val_map50": 0.4445141927714996,
-  "history": []
-}
